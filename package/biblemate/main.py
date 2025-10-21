@@ -1233,7 +1233,7 @@ Available tools are: {available_tools}.
 {user_request}"""
                         master_plan_output = agentmake(messages+[{"role": "user", "content": initial_prompt}], system="create_action_plan", **AGENTMAKE_CONFIG)
                         if master_plan_output:
-                            master_plan = master_plan_output[-1].get("content", "").strip() if output else ""
+                            master_plan = master_plan_output[-1].get("content", "").strip()
                     try:
                         await thinking(generate_master_plan, "Crafting a master plan ...")
                         if not master_plan_output:
