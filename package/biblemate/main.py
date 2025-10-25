@@ -172,8 +172,8 @@ Get a static text-based response directly from a text-based AI model without usi
     
     return tools, tools_schema, master_available_tools, available_tools, tool_descriptions, prompts, prompts_schema, resources, templates
 
-def display_cancel_message(console):
-    console.print(f"[bold {get_border_style()}]Cancelled![/bold {get_border_style()}]\n")
+def display_cancel_message(console, cancel_message="Cancelled!"):
+    console.print(f"[bold {get_border_style()}]{cancel_message}[/bold {get_border_style()}]\n")
     # display_info(console, "I've stopped processing for you.")
     config.cancelled = True
 
@@ -1427,6 +1427,11 @@ You provide the converted instruction directly, without any additional commentar
                     await process_tool(next_tool, next_step, step_number=step)
                 except (KeyboardInterrupt, asyncio.CancelledError):
                     display_cancel_message(console)
+                    conversation_broken = True
+                    break
+                if messages[-1]['content'] == "[NO_CONTENT]":
+                    messages = messages[:-2]  # remove last user and assistant messages
+                    display_cancel_message(console, cancel_message="No content was generated. Stopping the process.")
                     conversation_broken = True
                     break
                 console.rule()
