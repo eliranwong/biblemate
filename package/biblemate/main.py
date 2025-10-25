@@ -3,7 +3,7 @@ from biblemate.uba.dialogs import *
 from biblemate.ui.text_area import getTextArea
 from biblemate.ui.info import get_banner
 from biblemate import config, DIALOGS, BIBLEMATE_VERSION, AGENTMAKE_CONFIG, BIBLEMATE_USER_DIR, BIBLEMATEDATA, fix_string, write_user_config, list_dir_content
-from biblemate.uba.api import DEFAULT_MODULES, run_uba_api, run_uba_ai_commentary, run_uba_words, run_uba_discourse, run_uba_translation
+from biblemate.uba.api import DEFAULT_MODULES, run_uba_api
 from pathlib import Path
 import urllib.parse
 import asyncio, re, os, subprocess, click, gdown, pprint, argparse, json, zipfile, warnings, sys, traceback
@@ -12,6 +12,7 @@ from alive_progress import alive_bar
 from fastmcp import Client
 from fastmcp.client.transports import StreamableHttpTransport
 from agentmake.plugins.uba.lib.BibleBooks import BibleBooks
+from agentmake.plugins.uba.lib.BibleParser import BibleVerseParser
 from agentmake import agentmake, getOpenCommand, getDictionaryOutput, edit_file, edit_configurations, extractText, readTextFile, writeTextFile, getCurrentDateTime, AGENTMAKE_USER_DIR, USER_OS, DEVELOPER_MODE, DEFAULT_AI_BACKEND, DEFAULT_TEXT_EDITOR
 from agentmake.utils.files import searchFolder, isExistingPath
 from agentmake.etextedit import launch_async
@@ -320,6 +321,7 @@ async def main_async():
         resource_suggestions += [f"//lexicon/{i}/" for i in resource_suggestions_raw["lexiconList"]]
         abbr = BibleBooks.abbrev["eng"]
         resource_suggestions += [abbr[str(book)][0] for book in range(1,67)]
+        resource_suggestions += ["%"+abbr[str(book)][0]+" " for book in range(1,67)]
 
         write_user_config() # remove the temporary `config.backend`
         
@@ -430,12 +432,23 @@ async def main_async():
                         display_info(console, info, title="Error!")
                         config.current_prompt = check_path
                 continue
-            # luanch action menu
+            # process user request
             if not user_request:
                 continue
+            # luanch action menu
             elif user_request == ".":
                 select = await DIALOGS.getValidOptions(options=config.action_list.keys(), descriptions=[i.capitalize() for i in config.action_list.values()], title="Action Menu", text="Select an action:")
                 user_request = select if select else ""
+            # read bible references directly
+            elif user_request.startswith("%"):
+                user_request = fix_string(user_request[1:])
+                # three cases: 1. verses 2. chapter 3. search bible
+                refs = BibleVerseParser(False).extractAllReferencesReadable(user_request)
+                if refs:
+                    user_request = f"//bible/{refs}" if ":" in user_request else f"//chapter/{refs}"
+                else:
+                    user_request = f"//search/{user_request}"
+            # system commands
             elif user_request.startswith("!"):
                 cmd = user_request[1:].strip()
                 if not cmd:

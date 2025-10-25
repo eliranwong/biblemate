@@ -224,7 +224,7 @@ async def getTextArea(input_suggestions:list=None, default_entry="", title="", m
     @bindings.add("c-m")
     def _(event):
         entry = text_area.text.strip()
-        if not multiline or (not title and ((entry.strip() == "." or entry.startswith(".") and entry in input_suggestions) or entry.startswith(".open ") or entry.startswith(".import "))):
+        if not multiline or (not title and ((entry.strip() == "." or entry.startswith(".") and entry in input_suggestions) or entry.startswith(".open ") or entry.startswith(".import ") or entry.startswith("%"))):
             event.app.exit(result=text_area.text.strip())
         else:
             text_area.buffer.newline()
