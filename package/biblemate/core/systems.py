@@ -40,6 +40,6 @@ def get_system_tool_selection(available_tools: list, tool_descriptions: str) -> 
     """
     create system prompt for tool selection
     """
-    possible_system_file_path_2 = os.path.join(PACKAGE_PATH, "systems", "biblemate", "tool_selection_lite.md" if config.lite else "tool_selection.md")
-    possible_system_file_path_1 = os.path.join(AGENTMAKE_USER_DIR, "systems", "biblemate", "tool_selection_lite.md" if config.lite else "tool_selection.md")
-    return readTextFile(possible_system_file_path_2 if os.path.isfile(possible_system_file_path_2) else possible_system_file_path_1).format(available_tools=available_tools, tool_descriptions=tool_descriptions)
+    possible_system_file_path_2 = os.path.join(PACKAGE_PATH, "systems", "biblemate", "tool_selection_lite.md" if config.max_tool_number >= 0 else "tool_selection.md")
+    possible_system_file_path_1 = os.path.join(AGENTMAKE_USER_DIR, "systems", "biblemate", "tool_selection_lite.md" if config.max_tool_number >= 0 else "tool_selection.md")
+    return readTextFile(possible_system_file_path_2 if os.path.isfile(possible_system_file_path_2) else possible_system_file_path_1).format(available_tools=available_tools, tool_descriptions=tool_descriptions, max_tool_number=config.max_tool_number)

@@ -15,6 +15,7 @@ default_config = '''banner_title=""
 *auto_suggestions=True
 *auto_tool_selection=False
 *max_steps=50
+*max_tool_number=0
 *lite=False
 *web_browser=False
 *hide_tools_order=True
@@ -118,6 +119,7 @@ prompt_engineering={config.prompt_engineering}
 auto_suggestions={config.auto_suggestions}
 auto_tool_selection={config.auto_tool_selection}
 max_steps={config.max_steps}
+max_tool_number={config.max_tool_number}
 lite={config.lite}
 web_browser={config.web_browser}
 hide_tools_order={config.hide_tools_order}

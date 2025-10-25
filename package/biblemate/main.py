@@ -1269,6 +1269,7 @@ Available tools are: {available_tools}.
             system_make_suggestion = get_system_make_suggestion(master_plan=master_plan)
 
             # Get the first suggestion
+            config.cancelled = False
             conversation_broken = False
             if user_request == "[CONTINUE]":
                 next_suggestion = "CONTINUE"
@@ -1357,10 +1358,29 @@ Available tools are: {available_tools}.
                     else:
                         next_tool_description = tools.get(next_tool, "No description available.")
                         system_tool_instruction = get_system_tool_instruction(next_tool, next_tool_description)
-                        next_step_output = agentmake(next_suggestion, system=system_tool_instruction, **AGENTMAKE_CONFIG)
-                        next_step = next_step_output[-1].get("content", "").strip()
-                        # The following line may give better context, but when a conversation goes long, the agent loses track of the system message.
+                        # No context; missing information for the tool from the conversation
+                        #next_step_output = agentmake(next_suggestion, system=system_tool_instruction, **AGENTMAKE_CONFIG)
+                        #next_step = next_step_output[-1].get("content", "").strip()
+                        # Full context, but when a conversation goes long, the agent loses track of the system message.
                         #next_step = agentmake([{"role": "system", "content": system_tool_instruction}]+messages[len(DEFAULT_MESSAGES):], follow_up_prompt=next_suggestion, **AGENTMAKE_CONFIG)[-1].get("content", "").strip()
+                        # Minimum context that includes the original request and the latest exchanges, if any
+                        trimmed_messages = messages[len(DEFAULT_MESSAGES):]
+                        lite_messages = [{"role": "user", "content": original_request},{"role": "assistant", "content": "Let's begin."}] if len(trimmed_messages) >= 2 else []
+                        if len(trimmed_messages) > 2:
+                            lite_messages += trimmed_messages[len(trimmed_messages)-2:]
+                        next_suggestion += f"""
+
+# Remember:
+* Do NOT provide the answer or perform the task. Provide the instruction ONLY, which the AI assistant will follow or answer.
+* You are here to proved the instruction for the current step ONLY.
+* Do not mention the tool name in your instruction.
+* Do not mention further steps or tools to be used after this instruction.
+* Only provide the instruction for the specified tool `{next_tool}`.
+* Pay attention to the information the tool requires and provide the necessary details in your instruction.
+
+You provide the converted instruction directly, without any additional commentary or explanation."""
+                        next_step_output = agentmake([{"role": "system", "content": system_tool_instruction}]+lite_messages, follow_up_prompt=next_suggestion, **AGENTMAKE_CONFIG)
+                        next_step = next_step_output[-1].get("content", "").strip()
                 try:
                     await thinking(get_next_step, "Crafting the next instruction ...")
                     if not next_step_output:
