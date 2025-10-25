@@ -350,11 +350,10 @@ Key bindings `Ctrl+B`, `Ctrl+C`, `Ctrl+V` and `Ctrl+X` are designed for opening 
 * Use `.autosuggest` to toggle auto input suggestions. If disabled, you can use `TAB` key to open input suggestions menu.
 * Use `.reload` to reload the last saved conversation, if any.  It is useful for continuing an unfinished agentic flow after a conversation was broken for any reasons.
 * Command `.matches` works for local MCP connection only.  It doesn't apply to remote MCP connection, as the changes in local settings does not affect the settings in remote servers.
-
-### Other Special Entries:
-
-* Start your requests with "%" to read bible verses or chapters, or search the default bible.
-* Start your requests with "!" to run system commands
+* Start your requests with `.` to retrieve bible verses or chapters, or perform a bible search directly, when the content following the `.` does not match the action commands listed above. For examples:
+    - Enter `.John 3:16` to read the verse John 3:16
+    - Enter `.John 3` to read John chapter 3
+    - Enter `.Jesus love` to perform a bible search for `Jesus love`
 
 ## ✝️ UniqueBible Resources
 

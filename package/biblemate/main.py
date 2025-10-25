@@ -321,7 +321,7 @@ async def main_async():
         resource_suggestions += [f"//lexicon/{i}/" for i in resource_suggestions_raw["lexiconList"]]
         abbr = BibleBooks.abbrev["eng"]
         resource_suggestions += [abbr[str(book)][0] for book in range(1,67)]
-        resource_suggestions += ["%"+abbr[str(book)][0]+" " for book in range(1,67)]
+        resource_suggestions += ["."+abbr[str(book)][0]+" " for book in range(1,67)]
 
         write_user_config() # remove the temporary `config.backend`
         
@@ -440,7 +440,7 @@ async def main_async():
                 select = await DIALOGS.getValidOptions(options=config.action_list.keys(), descriptions=[i.capitalize() for i in config.action_list.values()], title="Action Menu", text="Select an action:")
                 user_request = select if select else ""
             # read bible references directly
-            elif user_request.startswith("%"):
+            elif user_request.startswith(".") and not ((user_request in config.action_list) or user_request.startswith(".open ") or user_request.startswith(".import ")):
                 user_request = fix_string(user_request[1:])
                 # three cases: 1. verses 2. chapter 3. search bible
                 refs = BibleVerseParser(False).extractAllReferencesReadable(user_request)
