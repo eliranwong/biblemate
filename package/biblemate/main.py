@@ -37,7 +37,7 @@ parser = argparse.ArgumentParser(description = f"""BibleMate AI {BIBLEMATE_VERSI
 # global options
 parser.add_argument("default", nargs="*", default=None, help="initial prompt")
 parser.add_argument("-b", "--backend", action="store", dest="backend", help="AI backend; overrides the default backend temporarily.")
-parser.add_argument("-l", "--lite", action="store", dest="lite", choices=["true", "false"], help="Enable / disable lite context. Must be one of: true, false.")
+parser.add_argument("-l", "--light", action="store", dest="light", choices=["true", "false"], help="Enable / disable light context. Must be one of: true, false.")
 parser.add_argument("-m", "--mode", action="store", dest="mode", choices=["agent", "partner", "chat"], help="Specify AI mode. Must be one of: agent, partner, chat.")
 parser.add_argument("-pe", "--promptengineer", action="store", dest="promptengineer", choices=["true", "false"], help="Enable / disable prompt engineering. Must be one of: true, false.")
 parser.add_argument("-s", "--steps", action="store", dest="steps", type=int, help="Specify the maximum number of steps allowed.")
@@ -75,10 +75,10 @@ Please provide me with the final answer to my original request based on the work
 """
 
 # other temporary config changes
-if args.lite == "true":
-    config.lite = True
-elif args.lite == "false":
-    config.lite = False
+if args.light == "true":
+    config.light = True
+elif args.light == "false":
+    config.light = False
 if args.mode == "agent":
     config.agent_mode = True
 elif args.mode == "partner":
@@ -129,12 +129,16 @@ async def initialize_app(client):
     available_tools = [i for i in available_tools if not i in config.disabled_tools]
 
     tool_descriptions = ""
+    tool_descriptions_lite = ""
     if "get_direct_text_response" not in tools:
-        tool_descriptions = """# TOOL DESCRIPTION: `get_direct_text_response`
+        tool_descriptions = tool_descriptions_lite = """# TOOL DESCRIPTION: `get_direct_text_response`
 Get a static text-based response directly from a text-based AI model without using any other tools. This is useful when you want to provide a simple and direct answer to a question or request, without the need for online latest updates or task execution."""
     for tool_name, tool_description in tools.items():
+        tool_description_lite = tool_description.strip().split("\n")[0]
         tool_descriptions += f"""# TOOL DESCRIPTION: `{tool_name}`
 {tool_description}\n\n\n"""
+        tool_descriptions_lite += f"""# TOOL DESCRIPTION: `{tool_name}`
+{tool_description_lite}\n\n\n"""
 
     prompts_raw = await client.list_prompts()
     prompts = {p.name: p.description for p in prompts_raw}
@@ -170,7 +174,7 @@ Get a static text-based response directly from a text-based AI model without usi
     templates = {r.name: (r.description, r.uriTemplate) for r in templates_raw}
     templates = dict(sorted(templates.items()))
     
-    return tools, tools_schema, master_available_tools, available_tools, tool_descriptions, prompts, prompts_schema, resources, templates
+    return tools, tools_schema, master_available_tools, available_tools, tool_descriptions, tool_descriptions_lite, prompts, prompts_schema, resources, templates
 
 def display_cancel_message(console, cancel_message="Cancelled!"):
     console.print(f"[bold {get_border_style()}]{cancel_message}[/bold {get_border_style()}]\n")
@@ -227,6 +231,13 @@ def get_border_style():
     elif config.agent_mode is not None:
         return config.color_partner_mode
     return "none"
+
+def get_lite_messages(messages, original_request):
+    trimmed_messages = messages[len(DEFAULT_MESSAGES):]
+    lite_messages = [{"role": "user", "content": original_request},{"role": "assistant", "content": "Let's begin."}] if len(trimmed_messages) >= 2 else []
+    if len(trimmed_messages) > 2:
+        lite_messages += trimmed_messages[len(trimmed_messages)-2:]
+    return [{"role": "system", "content": DEFAULT_SYSTEM}]+lite_messages
 
 async def download_data(console, default=""):
     file_ids = {
@@ -291,7 +302,7 @@ async def main_async():
         console.clear()
         console.print(get_banner(BIBLEMATE_VERSION))
 
-        tools, tools_schema, master_available_tools, available_tools, tool_descriptions, prompts, prompts_schema, resources, templates = await initialize_app(client)
+        tools, tools_schema, master_available_tools, available_tools, tool_descriptions, tool_descriptions_lite, prompts, prompts_schema, resources, templates = await initialize_app(client)
         resource_suggestions_raw = json.loads(run_uba_api(".resources"))
         # check if default modules are valid:
         config_changed = False
@@ -411,7 +422,7 @@ async def main_async():
             # Original user request
             # note: `python3 -m rich.emoji` for checking emoji
             console.print("Enter your request :smiley: :" if len(messages) == len(DEFAULT_MESSAGES) else "Enter a follow-up request :flexed_biceps: :")
-            input_suggestions = list(config.action_list.keys())+["@ ", "@@ "]+[f"@{t} " for t in available_tools]+[f"{p} " for p in prompt_list]+[f"//{r}" for r in resources.keys()]+template_list+resource_suggestions+config.custom_input_suggestions
+            input_suggestions = list(config.action_list.keys())+[".editprompt", "@ ", "@@ "]+[f"@{t} " for t in available_tools]+[f"{p} " for p in prompt_list]+["//"]+[f"//{r}" for r in resources.keys()]+template_list+resource_suggestions+config.custom_input_suggestions
             if args.default:
                 user_request = " ".join(args.default).strip()
                 args.default = None # reset to avoid repeated use
@@ -632,6 +643,8 @@ async def main_async():
                 except Exception as e: # invalid uri
                     print(f"Error: {e}\n")
                     continue
+            elif user_request.startswith("//"):
+                user_request = user_request[2:]
 
             # system command
             if user_request.startswith(".open") or user_request.startswith(".import") or user_request.startswith(".reload"):
@@ -922,10 +935,10 @@ Press `Ctrl+C` once or twice until the loading is cancelled, while you are waiti
                     write_user_config()
                     info = f"Auto Tool Selection in Chat Mode `{'Enabled' if config.auto_tool_selection else 'Disabled'}`"
                     display_info(console, info, title="configuration")
-                elif user_request == ".lite":
-                    config.lite = not config.lite
+                elif user_request == ".light":
+                    config.light = not config.light
                     write_user_config()
-                    info = f"Lite Context `{'Enabled' if config.lite else 'Disabled'}`"
+                    info = f"Light Context `{'Enabled' if config.light else 'Disabled'}`"
                     display_info(console, info, title="configuration")
                 elif user_request == ".download":
                     await download_data(console)
@@ -1005,7 +1018,7 @@ Press `Ctrl+C` once or twice until the loading is cancelled, while you are waiti
             specified_tool = ""
 
             # Tool selection systemm message
-            system_tool_selection = get_system_tool_selection(available_tools, tool_descriptions)
+            system_tool_selection = get_system_tool_selection(available_tools, tool_descriptions_lite if config.light else tool_descriptions)
 
             # auto tool selection in chat mode
             if config.agent_mode is None and config.auto_tool_selection and not user_request.startswith("@"):
@@ -1125,12 +1138,15 @@ Press `Ctrl+C` once or twice until the loading is cancelled, while you are waiti
                     else:
                         user_request = improved_prompt_edit
 
+                # update original request
+                original_request = user_request
+
             # Add user request to messages
             if not user_request == "[CONTINUE]":
                 messages.append({"role": "user", "content": user_request})
 
             async def run_tool(tool, tool_instruction):
-                nonlocal messages
+                nonlocal messages, original_request
                 tool_instruction = fix_string(tool_instruction)
                 messages[-1]["content"] = fix_string(messages[-1]["content"])
                 if tool == "get_direct_text_response":
@@ -1141,7 +1157,7 @@ Press `Ctrl+C` once or twice until the loading is cancelled, while you are waiti
                         tool_properties = tool_schema["parameters"]["properties"]
                         if len(tool_properties) == 1 and "request" in tool_properties: # AgentMake MCP Servers or alike
                             if "items" in tool_properties["request"]: # requires a dictionary instead of a string
-                                request_dict = [{"role": "system", "content": DEFAULT_SYSTEM}]+messages[len(messages)-2:] if config.lite else deepcopy(messages)
+                                request_dict = get_lite_messages(messages, original_request) if config.light else deepcopy(messages)
                                 tool_result = await client.call_tool(tool, {"request": request_dict}, timeout=config.mcp_timeout)
                             else:
                                 tool_result = await client.call_tool(tool, {"request": tool_instruction}, timeout=config.mcp_timeout)
@@ -1239,7 +1255,7 @@ Press `Ctrl+C` once or twice until the loading is cancelled, while you are waiti
 
 Available tools are: {available_tools}.
 
-{tool_descriptions}
+{tool_descriptions_lite if config.light else tool_descriptions}
 
 # My Request
 
@@ -1377,10 +1393,7 @@ Available tools are: {available_tools}.
                         # Full context, but when a conversation goes long, the agent loses track of the system message.
                         #next_step = agentmake([{"role": "system", "content": system_tool_instruction}]+messages[len(DEFAULT_MESSAGES):], follow_up_prompt=next_suggestion, **AGENTMAKE_CONFIG)[-1].get("content", "").strip()
                         # Minimum context that includes the original request and the latest exchanges, if any
-                        trimmed_messages = messages[len(DEFAULT_MESSAGES):]
-                        lite_messages = [{"role": "user", "content": original_request},{"role": "assistant", "content": "Let's begin."}] if len(trimmed_messages) >= 2 else []
-                        if len(trimmed_messages) > 2:
-                            lite_messages += trimmed_messages[len(trimmed_messages)-2:]
+                        lite_messages = get_lite_messages(messages, original_request)
                         next_suggestion += f"""
 
 # Remember:
@@ -1392,7 +1405,7 @@ Available tools are: {available_tools}.
 * Pay attention to the information the tool requires and provide the necessary details in your instruction.
 
 You provide the converted instruction directly, without any additional commentary or explanation."""
-                        next_step_output = agentmake([{"role": "system", "content": system_tool_instruction}]+lite_messages, follow_up_prompt=next_suggestion, **AGENTMAKE_CONFIG)
+                        next_step_output = agentmake(lite_messages, system=system_tool_instruction, follow_up_prompt=next_suggestion, **AGENTMAKE_CONFIG)
                         next_step = next_step_output[-1].get("content", "").strip()
                 try:
                     await thinking(get_next_step, "Crafting the next instruction ...")

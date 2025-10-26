@@ -15,8 +15,7 @@ default_config = '''banner_title=""
 *auto_suggestions=True
 *auto_tool_selection=False
 *max_steps=50
-*max_tool_number=0
-*lite=False
+*light=True
 *web_browser=False
 *hide_tools_order=True
 *skip_connection_check=False
@@ -119,8 +118,7 @@ prompt_engineering={config.prompt_engineering}
 auto_suggestions={config.auto_suggestions}
 auto_tool_selection={config.auto_tool_selection}
 max_steps={config.max_steps}
-max_tool_number={config.max_tool_number}
-lite={config.lite}
+light={config.light}
 web_browser={config.web_browser}
 hide_tools_order={config.hide_tools_order}
 skip_connection_check={config.skip_connection_check}
@@ -216,7 +214,7 @@ config.action_list = {
     ".autosuggest": "toggle auto input suggestions",
     ".autoprompt": "toggle auto prompt engineering",
     ".autotool": "toggle auto tool selection in chat mode",
-    ".lite": "toggle lite context",
+    ".light": "toggle light context",
     # file access
     ".content": "show current directory content",
     ".open": "open file or folder",
