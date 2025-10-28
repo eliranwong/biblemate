@@ -6,6 +6,12 @@ Developer: Eliran Wong
 
 <img width="1732" height="1302" alt="Image" src="https://github.com/user-attachments/assets/cb19d61a-2492-474d-b67a-ef2c59c7bcff" />
 
+## Other Languages
+
+Traditional Chinese version: https://github.com/eliranwong/biblematetc
+
+Simplified Chinese version: https://github.com/eliranwong/biblematesc
+
 ## 👀 An Overview
 
 English:
