@@ -383,7 +383,7 @@ async def main_async():
                 if step_number:
                     print(f"# Starting Step [{step_number}] ... [`Ctrl+C` to cancel]")
                 else:
-                    print(f"#  Getting started ... [`Ctrl+C` to cancel]")
+                    print(f"# Getting started ... [`Ctrl+C` to cancel]")
                 # Create the async task but don't await it yet.
                 task = asyncio.create_task(run_tool(tool, tool_instruction))
                 # Await the custom async progress bar that awaits the task.
