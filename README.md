@@ -8,7 +8,17 @@ Developer: Eliran Wong
 
 ## 👀 An Overview
 
+English:
+
 [![Watch the video](https://img.youtube.com/vi/BxpLmpCm4QU/maxresdefault.jpg)](https://youtu.be/BxpLmpCm4QU)
+
+Mandarin:
+
+[![Mandarin](https://img.youtube.com/vi/BL8HXBFqmvE/maxresdefault.jpg)](https://youtu.be/BL8HXBFqmvE)
+
+Cantonese:
+
+[![Cantonese](https://img.youtube.com/vi/MmRR3uMQPd8/maxresdefault.jpg)](https://youtu.be/MmRR3uMQPd8)
 
 ## ✨ Core Features
 
@@ -466,7 +476,7 @@ The following key bindings are supported in BibleMate AI prompt field:
 - `Ctrl+DOWN`: scroll down
 - `Shift+TAB`: insert four spaces
 - `TAB` or `Ctrl+I`: open input suggestion menu
-- `Esc`: close input suggestion menu
+- `Esc+Esc`: close input suggestion menu
 
 ### Cancel Loading an AI response
 

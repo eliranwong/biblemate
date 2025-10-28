@@ -293,8 +293,6 @@ async def main_async():
         client = Client(mcp_server) # no auth for stdio transport
 
     APP_START = True
-    DEFAULT_SYSTEM = "You are BibleMate AI, an autonomous agent designed to assist users with their Bible study."
-    DEFAULT_MESSAGES = [{"role": "system", "content": DEFAULT_SYSTEM}, {"role": "user", "content": "Hello!"}, {"role": "assistant", "content": "Hello! I'm BibleMate AI, your personal assistant for Bible study. How can I help you today?"}] # set a tone for bible study; it is userful when auto system is used.
 
     async with client:
 
@@ -357,7 +355,7 @@ async def main_async():
                     TextColumn("[progress.description]{task.description}"),
                     transient=True  # This makes the progress bar disappear after the task is done
                 ) as progress:
-                    task_id = progress.add_task(description if description else "Thinking ...", total=None)
+                    task_id = progress.add_task((description if description else "Thinking ...")+" [`Ctrl+C` to cancel]", total=None)
                     async_task = asyncio.create_task(process())
                     try:
                         while not async_task.done():
@@ -373,7 +371,7 @@ async def main_async():
                 """
                 A coroutine that runs a progress bar while awaiting a task.
                 """
-                with alive_bar(title="Processing...", spinner='dots') as bar:
+                with alive_bar(title="Processing ...", spinner='dots') as bar:
                     while not task.done():
                         bar() # Update the bar
                         await asyncio.sleep(0.02) # Yield control back to the event loop
@@ -383,7 +381,9 @@ async def main_async():
                 Manages the async task and the progress bar.
                 """
                 if step_number:
-                    print(f"# Starting Step [{step_number}]...")
+                    print(f"# Starting Step [{step_number}] ... [`Ctrl+C` to cancel]")
+                else:
+                    print(f"#  Getting started ... [`Ctrl+C` to cancel]")
                 # Create the async task but don't await it yet.
                 task = asyncio.create_task(run_tool(tool, tool_instruction))
                 # Await the custom async progress bar that awaits the task.
@@ -785,11 +785,11 @@ https://github.com/eliranwong/biblemate
 - `Ctrl+DOWN`: scroll down
 - `Shift+TAB`: insert four spaces
 - `TAB` or `Ctrl+I`: open input suggestion menu
-- `Esc`: close input suggestion menu
+- `Esc+Esc`: close input suggestion menu
 
-## Cancel Loading an AI response
+## Cancel Running Operations
 
-Press `Ctrl+C` once or twice until the loading is cancelled, while you are waiting for a response."""
+Press `Ctrl+C` once or twice until the running process is cancelled, while you are waiting for a response."""
                     display_info(console, Markdown(help_info), title="Help")
                 elif user_request == ".tools":
                     enabled_tools = await DIALOGS.getMultipleSelection(
@@ -1111,7 +1111,7 @@ Press `Ctrl+C` once or twice until the loading is cancelled, while you are waiti
                             if "```" in user_request:
                                 user_request = re.sub(r"^.*?(```improved_version|```)(.+?)```.*?$", r"\2", user_request, flags=re.DOTALL).strip()
                     except:
-                        improved_prompt_output = agentmake(messages if messages else user_request, follow_up_prompt=user_request if messages else None, system="improve_prompt_2", **AGENTMAKE_CONFIG)
+                        improved_prompt_output = agentmake(messages if messages else user_request, follow_up_prompt=user_request if messages else None, system=get_system_improve_prompt_2(), **AGENTMAKE_CONFIG)
                         if improved_prompt_output:
                             user_request = improved_prompt_output[-1].get("content", "").strip()
                             user_request = re.sub(r"^.*?(```improved_prompt|```)(.+?)```.*?$", r"\2", user_request, flags=re.DOTALL).strip()
@@ -1170,7 +1170,7 @@ Press `Ctrl+C` once or twice until the loading is cancelled, while you are waiti
                         messages.append({"role": "assistant", "content": tool_result if tool_result.strip() else "Tool error!"})
                     except Exception as e:
                         if DEVELOPER_MODE:
-                            console.print(f"Error: {e}\nFallback to direct response...\n\n")
+                            console.print(f"Error: {e}\nFallback to direct response ...\n\n")
                             print(traceback.format_exc())
                         messages = agentmake(messages, system="auto", **AGENTMAKE_CONFIG)
                 messages[-1]["content"] = fix_string(messages[-1]["content"])
@@ -1260,7 +1260,7 @@ Available tools are: {available_tools}.
 # My Request
 
 {user_request}"""
-                        master_plan_output = agentmake(messages+[{"role": "user", "content": initial_prompt}], system="create_action_plan", **AGENTMAKE_CONFIG)
+                        master_plan_output = agentmake(messages+[{"role": "user", "content": initial_prompt}], system=get_system_master_plan(), **AGENTMAKE_CONFIG)
                         if master_plan_output:
                             master_plan = master_plan_output[-1].get("content", "").strip()
                     try:

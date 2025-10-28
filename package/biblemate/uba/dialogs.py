@@ -374,7 +374,6 @@ async def uba_default_lexicon(options):
     select = await DIALOGS.getValidOptions(
         default=config.default_lexicon,
         options=options,
-        descriptions=descriptions,
         title="Configure Default Lexicon",
         text="Select a lexicon:"
     )

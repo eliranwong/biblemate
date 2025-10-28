@@ -43,3 +43,19 @@ def get_system_tool_selection(available_tools: list, tool_descriptions: str) -> 
     possible_system_file_path_2 = os.path.join(PACKAGE_PATH, "systems", "biblemate", "tool_selection_lite.md" if config.light else "tool_selection.md")
     possible_system_file_path_1 = os.path.join(AGENTMAKE_USER_DIR, "systems", "biblemate", "tool_selection_lite.md" if config.light else "tool_selection.md")
     return readTextFile(possible_system_file_path_2 if os.path.isfile(possible_system_file_path_2) else possible_system_file_path_1).format(available_tools=available_tools, tool_descriptions=tool_descriptions)
+
+def get_system_master_plan() -> str:
+    """
+    create system prompt for master plan generation
+    """
+    possible_system_file_path_2 = os.path.join(PACKAGE_PATH, "systems", "create_action_plan.md")
+    possible_system_file_path_1 = os.path.join(AGENTMAKE_USER_DIR, "systems", "create_action_plan.md")
+    return readTextFile(possible_system_file_path_2 if os.path.isfile(possible_system_file_path_2) else possible_system_file_path_1)
+
+def get_system_improve_prompt_2() -> str:
+    """
+    create system prompt for prompt engineering
+    """
+    possible_system_file_path_2 = os.path.join(PACKAGE_PATH, "systems", "improve_prompt_2.md")
+    possible_system_file_path_1 = os.path.join(AGENTMAKE_USER_DIR, "systems", "improve_prompt_2.md")
+    return readTextFile(possible_system_file_path_2 if os.path.isfile(possible_system_file_path_2) else possible_system_file_path_1)
