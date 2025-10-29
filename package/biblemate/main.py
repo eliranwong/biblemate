@@ -2,7 +2,7 @@ from biblemate.core.systems import *
 from biblemate.uba.dialogs import *
 from biblemate.ui.text_area import getTextArea
 from biblemate.ui.info import get_banner
-from biblemate import config, DIALOGS, BIBLEMATE_VERSION, AGENTMAKE_CONFIG, BIBLEMATE_USER_DIR, BIBLEMATEDATA, fix_string, write_user_config, list_dir_content
+from biblemate import config, CONFIG_FILE_BACKUP, DIALOGS, BIBLEMATE_VERSION, AGENTMAKE_CONFIG, BIBLEMATE_USER_DIR, BIBLEMATEDATA, fix_string, write_user_config, list_dir_content
 from biblemate.uba.api import DEFAULT_MODULES, run_uba_api
 from pathlib import Path
 import urllib.parse
@@ -13,7 +13,7 @@ from fastmcp import Client
 from fastmcp.client.transports import StreamableHttpTransport
 from agentmake.plugins.uba.lib.BibleBooks import BibleBooks
 from agentmake.plugins.uba.lib.BibleParser import BibleVerseParser
-from agentmake import agentmake, getOpenCommand, getDictionaryOutput, edit_file, edit_configurations, extractText, readTextFile, writeTextFile, getCurrentDateTime, AGENTMAKE_USER_DIR, USER_OS, DEVELOPER_MODE, DEFAULT_AI_BACKEND, DEFAULT_TEXT_EDITOR
+from agentmake import agentmake, getOpenCommand, getDictionaryOutput, edit_file, edit_configurations, extractText, readTextFile, writeTextFile, getCurrentDateTime, AGENTMAKE_USER_DIR, USER_OS, DEVELOPER_MODE, DEFAULT_TEXT_EDITOR
 from agentmake.utils.files import searchFolder, isExistingPath
 from agentmake.etextedit import launch_async
 from agentmake.utils.manage_package import getPackageLatestVersion
@@ -56,14 +56,25 @@ if not sys.stdin.isatty():
         args.default = [stdin_text]
 
 # write to the `config.py` file temporarily for the MCP server to pick it up
-if args.backend:
-    with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "config.py"), "a", encoding="utf-8") as fileObj:
-        fileObj.write(f'''\nbackend="{args.backend}"''')
-    config.backend = args.backend
-else:
-    with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "config.py"), "a", encoding="utf-8") as fileObj:
-        fileObj.write(f'''\nbackend="{DEFAULT_AI_BACKEND}"''')
-    config.backend = DEFAULT_AI_BACKEND
+config.backend = args.backend if args.backend else os.getenv("DEFAULT_AI_BACKEND") if os.getenv("DEFAULT_AI_BACKEND") else "googleai"
+with open(CONFIG_FILE_BACKUP, "a", encoding="utf-8") as fileObj:
+    fileObj.write(f'''\nconfig.backend="{config.backend}"''')
+
+AGENTMAKE_ENV_PATH = os.path.join(AGENTMAKE_USER_DIR, "agentmake.env")
+if config.backend == "googleai" and not os.getenv("GOOGLEAI_API_KEY"):
+    googleai_api_key = DIALOGS.getInputDialog_sync(title="Google AI API key", text="Enter your Google AI API key:")
+    if googleai_api_key and googleai_api_key.strip():
+        googleai_api_key = googleai_api_key.strip()
+        agentmake_env_content = readTextFile(AGENTMAKE_ENV_PATH)
+        if os.path.isfile(AGENTMAKE_ENV_PATH) and "\nGOOGLEAI_API_KEY=" in agentmake_env_content:
+            writeTextFile(AGENTMAKE_ENV_PATH, re.sub("\nGOOGLEAI_API_KEY=[^\n]*?\n", f'\nGOOGLEAI_API_KEY="{googleai_api_key}"\n', agentmake_env_content))
+        else:
+            with open(AGENTMAKE_ENV_PATH, "a", encoding="utf-8") as fileObj:
+                fileObj.write(f'''\nGOOGLEAI_API_KEY="{googleai_api_key}"\n''')
+        print("""###   Configuration Updated   ###
+Enter `biblemate` again to start using BibleMate AI with Google AI backend.
+""")
+        exit()
 
 AGENTMAKE_CONFIG["backend"] = config.backend
 DEFAULT_SYSTEM = "You are BibleMate AI, an autonomous agent designed to assist users with their Bible study."
@@ -1508,7 +1519,7 @@ You provide the converted instruction directly, without any additional commentar
                 config.backup_required = False
     
     # back up configurations
-    write_user_config(backup=True)
+    #write_user_config()
     # reset terminal window title
     clear_title()
 

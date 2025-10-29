@@ -309,7 +309,7 @@ async def getTextArea(input_suggestions:list=None, default_entry="", title="", m
         elif result == "[CONVERSATION]":
             options = [".new", ".reload", ".backup", ".edit", ".trim", ".import", ".export", ".find"]
             descriptions = [config.action_list[i] for i in options]
-            select = await DIALOGS.getValidOptions(options=options, descriptions=descriptions, title="Commentaries", text="Select an option to continue:")
+            select = await DIALOGS.getValidOptions(options=options, descriptions=descriptions, title="Conversation", text="Select an option to continue:")
             return select if select else ""
         elif result == "[SAVEPROMPT]":
             user_input = await DIALOGS.getInputDialog(title="Save Prompt", text="Enter a name:")
@@ -328,7 +328,7 @@ async def getTextArea(input_suggestions:list=None, default_entry="", title="", m
         elif result == "[DELETEPROMPT]":
             options = [".deleteprompt", ".deleteplan"]
             descriptions = ["Delete a prompt", "Delete a plan"]
-            select = await DIALOGS.getValidOptions(options=options, descriptions=descriptions, title="Open Prompt / Plan", text="Select an option to continue:")
+            select = await DIALOGS.getValidOptions(options=options, descriptions=descriptions, title="Delete Prompt / Plan", text="Select an option to continue:")
             if not select:
                 return ""
             prompts_path = os.path.join(BIBLEMATE_USER_DIR, "prompts")
@@ -340,7 +340,7 @@ async def getTextArea(input_suggestions:list=None, default_entry="", title="", m
                 prefix = plans_path if select == ".deleteplan" else prompts_path
                 suffix = ".plan" if select == ".deleteplan" else ".prompt"
                 options = [i[len(prefix)+1:-(len(suffix))] for i in found]
-                select = await DIALOGS.getValidOptions(options=options, title="Open Plan" if select == ".deleteplan" else "Open Prompt", text="Select a plan:" if select == ".deleteplan" else "Select a prompt:")
+                select = await DIALOGS.getValidOptions(options=options, title="Delete Plan" if select == ".deleteplan" else "Delete Prompt", text="Select a plan:" if select == ".deleteplan" else "Select a prompt:")
                 if select:
                     os.remove(os.path.join(prefix, select+suffix))
             return ""

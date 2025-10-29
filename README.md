@@ -116,6 +116,8 @@ graph TD
 
 ## 🚀 Quick Start
 
+Read fresh installation instructions at https://github.com/eliranwong/biblemate/blob/main/docs/installation/macOS.md
+
 > pip install --upgrade biblemate
 
 > biblemate
@@ -178,7 +180,7 @@ A text editor is opened for you to edit the AgentMake AI settings. Change the `D
 
 You may override the default AI backend temporarily by using the CLI option `-b` or `--backend`. For example,
 
-> biblemate -b groq
+> biblemate -b googleai
 
 ### Configure UBA API [Optional]
 

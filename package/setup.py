@@ -2,7 +2,7 @@ from setuptools import setup
 from setuptools.command.install import install
 import os, shutil, platform, sys
 
-version = "0.2.12"
+version = "0.2.20"
 with open(os.path.join("biblemate", "version.txt"), "w", encoding="utf-8") as fileObj:
     fileObj.write(version)
 
@@ -63,7 +63,7 @@ setup(
     license="GNU General Public License (GPL)",
     install_requires=install_requires,
     extras_require={
-        'genai': ["google-genai>=1.42.0"],  # Dependencies for running Vertex AI
+        'genai': ["google-genai>=1.46.0"],  # Dependencies for running Vertex AI
     },
     entry_points={
         "console_scripts": [

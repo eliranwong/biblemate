@@ -1,38 +1,66 @@
 from agentmake import USER_OS, AGENTMAKE_USER_DIR, readTextFile, writeTextFile
 from pathlib import Path
+from biblemate import config
 from biblemate.ui.selection_dialog import TerminalModeDialogs
-import os, shutil, pprint, subprocess
+import os, shutil, pprint
 
-CONFIG_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "config.py")
-CONFIG_FILE_BACKUP = os.path.join(AGENTMAKE_USER_DIR, "biblemate", "config.py")
+CONFIG_FILE_BACKUP = os.path.join(AGENTMAKE_USER_DIR, "biblemate", "biblemate.config")
 
-# NOTE: When add a config item, update both `default_config` and `write_user_config`
+# NOTE: When add a config item, update both `write_user_config` and `default_config`
+
+def write_user_config():
+    """Writes the current configuration to the user's config file."""
+    configurations = f"""config.banner_title="{config.banner_title}"
+config.agent_mode={config.agent_mode}
+config.prompt_engineering={config.prompt_engineering}
+config.auto_suggestions={config.auto_suggestions}
+config.auto_tool_selection={config.auto_tool_selection}
+config.max_steps={config.max_steps}
+config.light={config.light}
+config.web_browser={config.web_browser}
+config.hide_tools_order={config.hide_tools_order}
+config.skip_connection_check={config.skip_connection_check}
+config.default_bible="{config.default_bible}"
+config.default_commentary="{config.default_commentary}"
+config.default_encyclopedia="{config.default_encyclopedia}"
+config.default_lexicon="{config.default_lexicon}"
+config.max_semantic_matches={config.max_semantic_matches}
+config.max_log_lines={config.max_log_lines}
+config.mcp_port={config.mcp_port}
+config.mcp_timeout={config.mcp_timeout}
+config.color_agent_mode="{config.color_agent_mode}"
+config.color_partner_mode="{config.color_partner_mode}"
+config.color_info_border="{config.color_info_border}"
+config.embedding_model="{config.embedding_model}"
+config.custom_input_suggestions={pprint.pformat(config.custom_input_suggestions)}
+config.disabled_tools={pprint.pformat(config.disabled_tools)}"""
+    writeTextFile(CONFIG_FILE_BACKUP, configurations)
 
 # restore config backup after upgrade
-default_config = '''banner_title=""
-*agent_mode=False
-*prompt_engineering=False
-*auto_suggestions=True
-*auto_tool_selection=False
-*max_steps=50
-*light=True
-*web_browser=False
-*hide_tools_order=True
-*skip_connection_check=False
-*default_bible="NET"
-*default_commentary="CBSC"
-*default_encyclopedia="ISB"
-*default_lexicon="Morphology"
-*max_semantic_matches=15
-*max_log_lines=2000
-*mcp_port=33333
-*mcp_timeout=9999999999
-*color_agent_mode="#FF8800"
-*color_partner_mode="#8000AA"
-*color_info_border="bright_blue"
-*embedding_model="paraphrase-multilingual"
-*custom_input_suggestions=[]
-*disabled_tools=['search_1_chronicles_only',
+default_config = '''config.banner_title=""
+config.agent_mode=False
+config.prompt_engineering=False
+config.auto_suggestions=True
+config.auto_tool_selection=False
+config.max_steps=50
+config.light=True
+config.web_browser=False
+config.hide_tools_order=True
+config.skip_connection_check=False
+config.default_bible="NET"
+config.default_commentary="CBSC"
+config.default_encyclopedia="ISB"
+config.default_lexicon="Morphology"
+config.max_semantic_matches=15
+config.max_log_lines=2000
+config.mcp_port=33333
+config.mcp_timeout=9999999999
+config.color_agent_mode="#FF8800"
+config.color_partner_mode="#8000AA"
+config.color_info_border="bright_blue"
+config.embedding_model="paraphrase-multilingual"
+config.custom_input_suggestions=[]
+config.disabled_tools=['search_1_chronicles_only',
 'search_1_corinthians_only',
 'search_1_john_only',
 'search_1_kings_only',
@@ -99,54 +127,25 @@ default_config = '''banner_title=""
 'search_zechariah_only',
 'search_zephaniah_only']'''
 
-if readTextFile(CONFIG_FILE).strip() == "":
-    just_upgraded = True
-    if os.path.isfile(CONFIG_FILE_BACKUP):
-        shutil.copy(CONFIG_FILE_BACKUP, CONFIG_FILE)
+def load_config():
+    """Loads the user's configuration from the config file."""
+    if not os.path.isfile(CONFIG_FILE_BACKUP):
+        exec(default_config, globals())
+        write_user_config()
     else:
-        writeTextFile(CONFIG_FILE, default_config.replace("\n*", "\n"))
-else:
-    just_upgraded = False
-
-from biblemate import config
-
-def write_user_config(backup=False):
-    """Writes the current configuration to the user's config file."""
-    configurations = f"""banner_title="{config.banner_title}"
-agent_mode={config.agent_mode}
-prompt_engineering={config.prompt_engineering}
-auto_suggestions={config.auto_suggestions}
-auto_tool_selection={config.auto_tool_selection}
-max_steps={config.max_steps}
-light={config.light}
-web_browser={config.web_browser}
-hide_tools_order={config.hide_tools_order}
-skip_connection_check={config.skip_connection_check}
-default_bible="{config.default_bible}"
-default_commentary="{config.default_commentary}"
-default_encyclopedia="{config.default_encyclopedia}"
-default_lexicon="{config.default_lexicon}"
-max_semantic_matches={config.max_semantic_matches}
-max_log_lines={config.max_log_lines}
-mcp_port={config.mcp_port}
-mcp_timeout={config.mcp_timeout}
-color_agent_mode="{config.color_agent_mode}"
-color_partner_mode="{config.color_partner_mode}"
-color_info_border="{config.color_info_border}"
-embedding_model="{config.embedding_model}"
-custom_input_suggestions={pprint.pformat(config.custom_input_suggestions)}
-disabled_tools={pprint.pformat(config.disabled_tools)}"""
-    writeTextFile(CONFIG_FILE_BACKUP if backup else CONFIG_FILE, configurations)
-
-if just_upgraded:
+        exec(readTextFile(CONFIG_FILE_BACKUP), globals())
+    # check if new config items are added
     changed = False
-    for config_item in default_config.split("\n*"):
-        key, value = config_item.split("=", 1)
+    for config_item in default_config[7:].split("\nconfig."):
+        key, _ = config_item.split("=", 1)
         if not hasattr(config, key):
             exec(f"config.{config_item}", globals())
             changed = True
     if changed:
         write_user_config()
+
+# load user config at startup
+load_config()
 
 # temporary config
 config.current_prompt = ""
