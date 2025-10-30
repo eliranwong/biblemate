@@ -4,7 +4,10 @@ from biblemate import config
 from biblemate.ui.selection_dialog import TerminalModeDialogs
 import os, shutil, pprint
 
-CONFIG_FILE_BACKUP = os.path.join(AGENTMAKE_USER_DIR, "biblemate", "biblemate.config")
+BIBLEMATE_USER_DIR = os.path.join(AGENTMAKE_USER_DIR, "biblemate")
+if not os.path.isdir(BIBLEMATE_USER_DIR):
+    Path(BIBLEMATE_USER_DIR).mkdir(parents=True, exist_ok=True)
+CONFIG_FILE_BACKUP = os.path.join(BIBLEMATE_USER_DIR, "biblemate.config")
 
 # NOTE: When add a config item, update both `write_user_config` and `default_config`
 
@@ -239,7 +242,6 @@ AGENTMAKE_CONFIG = {
 }
 OLLAMA_NOT_FOUND = "`Ollama` is not found! BibleMate AI uses `Ollama` to generate embeddings for semantic searches. You may install it from https://ollama.com/ so that you can perform semantic searches of the Bible with BibleMate AI."
 BIBLEMATE_VERSION = readTextFile(os.path.join(os.path.dirname(os.path.realpath(__file__)), "version.txt"))
-BIBLEMATE_USER_DIR = os.path.join(AGENTMAKE_USER_DIR, "biblemate")
 BIBLEMATEDATA = os.path.join(AGENTMAKE_USER_DIR, "biblemate", "data")
 if not os.path.isdir(BIBLEMATEDATA):
     Path(BIBLEMATEDATA).mkdir(parents=True, exist_ok=True)

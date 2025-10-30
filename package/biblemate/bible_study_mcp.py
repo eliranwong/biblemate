@@ -1,4 +1,4 @@
-import logging, json, os, argparse
+import logging, json, os
 from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
 from fastmcp.server.auth.providers.jwt import JWTVerifier
 from fastmcp import FastMCP
@@ -9,13 +9,7 @@ from biblemate.uba.bible import search_bible
 from biblemate.uba.api import run_uba_api, run_uba_ai_commentary, run_uba_words, run_uba_discourse, run_uba_translation, run_uba_index
 from typing import List, Dict, Any, Union
 
-# configure backend
-parser = argparse.ArgumentParser(description = f"""BibleMate AI {BIBLEMATE_VERSION} CLI options""")
-parser.add_argument("-b", "--backend", action="store", dest="backend", help="AI backend; overrides the default backend temporarily.")
-args = parser.parse_args()
-THIS_BACKEND = args.backend if args.backend else os.getenv("DEFAULT_AI_BACKEND") if os.getenv("DEFAULT_AI_BACKEND") else "googleai"
-if not config.backend == THIS_BACKEND:
-    THIS_BACKEND = config.backend
+THIS_BACKEND = config.backend if hasattr(config, "backend") else os.getenv("DEFAULT_AI_BACKEND") if os.getenv("DEFAULT_AI_BACKEND") else "googleai"
 
 # configure backend
 AGENTMAKE_CONFIG["backend"] = THIS_BACKEND
