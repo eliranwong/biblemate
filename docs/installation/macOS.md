@@ -64,7 +64,7 @@ bmsc
 4. Enter the Google Gemini API Key you applied for in the first step. If you don't want to type it character by character, you can copy the API Key first, then press `Command+V` to paste it here (please replace xxxxxxxxxxx with your valid API Key):
 <img width="1002" height="697" alt="Image" src="https://github.com/user-attachments/assets/ee882eae-514f-4406-95cf-a40d1fe632ac" />
 
-5. BibleMate AI supports using several API Keys in rotation (separate multiple API Keys with an English comma `,`, but do not add spaces):
+5. BibleMate AI supports using several API Keys in rotation (separate multiple API Keys with an English comma `,` without spaces):
 <img width="1002" height="697" alt="Image" src="https://github.com/user-attachments/assets/6520bcbf-ee7d-4727-8c1d-2fb36b7e3a69" />
 
 6. After pressing `OK` to confirm, you need to restart. In the Terminal App, type `biblemate` or `bmsc`.
@@ -81,12 +81,37 @@ bmsc
 2. Enter your request, then press `Ctrl+S` to confirm and let BibleMate AI execute your request.
 <img width="1002" height="697" alt="Image" src="https://github.com/user-attachments/assets/a2f84f01-e2e4-496e-9359-b8afd5dcc583" />
 
+## Exit Current Entry
+
+Press `Ctrl+Q` to exit current entries.
+
+## Use Built-in Text Editor for Editing
+
+You can press `Ctrl+O` to edit your input with the built-in text editor for more editing features via plugins.
+
+## Manage Conversation
+
+Each of your requests and BibleMate AI's responses are taken into a conversation flow for building context for future requests.
+
+The following entries are designed for conversation management:
+
+| Entries              | Description                        |
+|----------------------|------------------------------------|
+| `.new`               | New conversation                   |
+| `.backup`            | Backup conversation                |
+| `.reload`            | Reload current conversation        |
+| `.edit`              | Edit current conversation          |
+| `.trim`              | Trim current conversation          |
+| `.import`            | Import conversation                |
+| `.export`            | Export conversation                |
+| `.find`              | Search conversation                |
+
 ## Switching Between Different AI Modes
 
-BibleMate AI supports three AI modes - Agent, Copilot, and Chat - for users to switch between as needed:
+BibleMate AI supports three AI modes - Agent, Partner, and Chat - for users to switch between as needed:
 
 * `Agent` mode - Fully automatic mode, where the AI executes all steps.
-* `Copilot` mode - Semi-automatic operation mode, where the user participates in reviewing and modifying.
+* `Partner` mode (default) - Semi-automatic operation mode, where the user participates in reviewing and modifying.
 * `Chat` mode - A simple question-and-answer dialogue mode.
 
 1. Enter `.mode` to open the AI mode menu:

@@ -422,7 +422,7 @@ async def main_async():
                     # check connection
                     if not config.skip_connection_check:
                         try:
-                            agentmake("Hello!", system=DEFAULT_SYSTEM)
+                            agentmake("Hello!", backend=config.backend, system=DEFAULT_SYSTEM)
                         except Exception as e:
                             print("Connection failed! Please ensure that you have a stable internet connection and that my AI backend and model are properly configured.")
                             print("Viist https://github.com/eliranwong/agentmake#supported-backends for help about the backend configuration.\n")
