@@ -414,7 +414,7 @@ async def main_async():
                 generated_title = ""
                 async def run_prompt_engineering():
                     nonlocal generated_title_output, generated_title
-                    generated_title_output = agentmake(original_request, system="generate_title", **AGENTMAKE_CONFIG)
+                    generated_title_output = agentmake(original_request, system=get_system_generate_title(), **AGENTMAKE_CONFIG)
                     if generated_title_output:
                         generated_title = generated_title_output[-1].get("content", "").strip().replace("Title: ", "")
                 try:

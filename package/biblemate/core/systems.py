@@ -59,3 +59,12 @@ def get_system_improve_prompt_2() -> str:
     possible_system_file_path_2 = os.path.join(PACKAGE_PATH, "systems", "improve_prompt_2.md")
     possible_system_file_path_1 = os.path.join(AGENTMAKE_USER_DIR, "systems", "improve_prompt_2.md")
     return readTextFile(possible_system_file_path_2 if os.path.isfile(possible_system_file_path_2) else possible_system_file_path_1)
+
+def get_system_generate_title() -> str:
+    """
+    create system prompt for title generation
+    """
+    possible_system_file_path_2 = os.path.join(PACKAGE_PATH, "systems", "generate_title.md")
+    possible_system_file_path_1 = os.path.join(AGENTMAKE_USER_DIR, "systems", "generate_title.md")
+    system_prompt = readTextFile(possible_system_file_path_2 if os.path.isfile(possible_system_file_path_2) else possible_system_file_path_1)
+    return system_prompt
