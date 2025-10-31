@@ -83,6 +83,14 @@ Please provide me with the final answer to my original request based on the work
 
 # Original Request
 """
+TOOL_INSTRUCTION_PROMPT = """Please transform the following suggestions into clear, precise, and actionable instructions."""
+TOOL_INSTRUCTION_SUFFIX = """
+
+# Remember
+
+* Provide me with the instructions directly.
+* Do not start your response, like, 'Here are the insturctions ...'
+* Do not ask me if I want to execute the instruction."""
 
 # other temporary config changes
 if args.light == "true":
@@ -358,7 +366,7 @@ async def main_async():
                     TextColumn("[progress.description]{task.description}"),
                     transient=True  # This makes the progress bar disappear after the task is done
                 ) as progress:
-                    task_id = progress.add_task((description if description else "Thinking ...")+" [`Ctrl+C` to cancel]", total=None)
+                    task_id = progress.add_task((description if description else "Thinking ...")+" [Ctrl+C -> Cancel]", total=None)
                     async_task = asyncio.create_task(process())
                     try:
                         while not async_task.done():
@@ -384,9 +392,9 @@ async def main_async():
                 Manages the async task and the progress bar.
                 """
                 if step_number:
-                    print(f"# Starting Step [{step_number}] ... [`Ctrl+C` to cancel]")
+                    print(f"# Starting Step [{step_number}] ... [Ctrl+C -> Cancel]")
                 else:
-                    print(f"# Getting started ... [`Ctrl+C` to cancel]")
+                    print(f"# Getting started ... [Ctrl+C -> Cancel]")
                 # Create the async task but don't await it yet.
                 task = asyncio.create_task(run_tool(tool, tool_instruction))
                 # Await the custom async progress bar that awaits the task.
@@ -462,6 +470,9 @@ async def main_async():
                     user_request = f"//bible/{refs}" if ":" in user_request else f"//chapter/{refs}"
                 else:
                     user_request = f"//search/{user_request}"
+            # direct text response
+            elif user_request.startswith("\\"):
+                user_request = "@get_direct_text_response " + "\n\n" + fix_string(user_request[1:])
             # system commands
             elif user_request.startswith("!"):
                 cmd = user_request[1:].strip()
@@ -719,7 +730,7 @@ async def main_async():
                     if messages:
                         for i in messages:
                             if i.get("role", "") == "user":
-                                display_info(console,Markdown(i['content'].strip()), border_style=get_border_style())
+                                display_info(console, Markdown(i['content'].strip()), border_style=get_border_style())
                             elif i.get("role", "") == "assistant":
                                 console.print(Markdown(i['content'].strip()))
                                 console.print()
@@ -1178,9 +1189,41 @@ Press `Ctrl+C` once or twice until the running process is cancelled, while you a
                         messages = agentmake(messages, system="auto", **AGENTMAKE_CONFIG)
                 messages[-1]["content"] = fix_string(messages[-1]["content"])
 
-            # user specify a single tool
+            # execute a single tool
             if specified_tool and not specified_tool == "@@" and not specified_prompt:
-                display_info(console,Markdown(messages[-1]['content']), border_style=get_border_style())
+                if not specified_tool == "get_direct_text_response":
+                    # refine instruction
+                    refined_instruction_output = []
+                    refined_instruction = ""
+                    async def refine_tool_instruction():
+                        nonlocal refined_instruction_output, refined_instruction, tools, messages, original_request, specified_tool
+                        specified_tool_description = tools.get(specified_tool, "No description available.")
+                        instruction_draft = TOOL_INSTRUCTION_PROMPT + "\n\n# Suggestions\n\n"+messages[-1]['content']+f"\n\n# Tool Description of `{specified_tool}`\n\n"+specified_tool_description+TOOL_INSTRUCTION_SUFFIX
+                        system_tool_instruction = get_system_tool_instruction(specified_tool, specified_tool_description)
+                        if config.light:
+                            this_messages = get_lite_messages(messages, original_request)
+                        else:
+                            this_messages = [{"role": "system", "content": system_tool_instruction}]+messages[len(DEFAULT_MESSAGES):]
+                        refined_instruction_output = agentmake(this_messages, system=system_tool_instruction, follow_up_prompt=instruction_draft, **AGENTMAKE_CONFIG)
+                        refined_instruction = refined_instruction_output[-1].get("content", "").strip()
+                    try:
+                        await thinking(refine_tool_instruction, "Refining tool instruction ...")
+                        if not refined_instruction_output:
+                            display_cancel_message(console)
+                            if step == 1:
+                                config.current_prompt = original_request
+                            conversation_broken = True
+                            break
+                        else:
+                            messages[-1]['content'] = refined_instruction
+                    except (KeyboardInterrupt, asyncio.CancelledError):
+                        display_cancel_message(console)
+                        if step == 1:
+                            config.current_prompt = original_request
+                        conversation_broken = True
+                        break
+                    # display refined instruction
+                    display_info(console, Markdown(messages[-1]['content']), title="Refined Instruction", border_style=get_border_style())
                 try:
                     await process_tool(specified_tool, user_request)
                 except (KeyboardInterrupt, asyncio.CancelledError):
@@ -1197,7 +1240,7 @@ Press `Ctrl+C` once or twice until the running process is cancelled, while you a
             # Chat mode
             messages_output = []
             if config.agent_mode is None and not specified_tool == "@@" and not specified_prompt:
-                display_info(console,Markdown(messages[-1]['content']), border_style="none")
+                display_info(console, Markdown(messages[-1]['content']), border_style="none")
                 async def run_chat_mode():
                     nonlocal messages_output, messages, user_request
                     messages_output = agentmake(messages if messages else user_request, system="auto", **AGENTMAKE_CONFIG)
@@ -1383,32 +1426,19 @@ Available tools are: {available_tools}.
                 next_step_output = []
                 next_step = ""
                 async def get_next_step():
-                    nonlocal next_step_output, next_step, next_tool, next_suggestion, tools
+                    nonlocal next_step_output, next_step, next_tool, next_suggestion, tools, messages, original_request
                     if next_tool == "get_direct_text_response":
                         next_step_output = agentmake(next_suggestion, system="biblemate/direct_instruction", **AGENTMAKE_CONFIG)
                         next_step = next_step_output[-1].get("content", "").strip()
                     else:
                         next_tool_description = tools.get(next_tool, "No description available.")
+                        next_suggestion = TOOL_INSTRUCTION_PROMPT + "\n\n# Suggestions\n\n"+next_suggestion+f"\n\n# Tool Description of `{next_tool}`\n\n"+next_tool_description+TOOL_INSTRUCTION_SUFFIX
                         system_tool_instruction = get_system_tool_instruction(next_tool, next_tool_description)
-                        # No context; missing information for the tool from the conversation
-                        #next_step_output = agentmake(next_suggestion, system=system_tool_instruction, **AGENTMAKE_CONFIG)
-                        #next_step = next_step_output[-1].get("content", "").strip()
-                        # Full context, but when a conversation goes long, the agent loses track of the system message.
-                        #next_step = agentmake([{"role": "system", "content": system_tool_instruction}]+messages[len(DEFAULT_MESSAGES):], follow_up_prompt=next_suggestion, **AGENTMAKE_CONFIG)[-1].get("content", "").strip()
-                        # Minimum context that includes the original request and the latest exchanges, if any
-                        lite_messages = get_lite_messages(messages, original_request)
-                        next_suggestion += f"""
-
-# Remember:
-* Do NOT provide the answer or perform the task. Provide the instruction ONLY, which the AI assistant will follow or answer.
-* You are here to proved the instruction for the current step ONLY.
-* Do not mention the tool name in your instruction.
-* Do not mention further steps or tools to be used after this instruction.
-* Only provide the instruction for the specified tool `{next_tool}`.
-* Pay attention to the information the tool requires and provide the necessary details in your instruction.
-
-You provide the converted instruction directly, without any additional commentary or explanation."""
-                        next_step_output = agentmake(lite_messages, system=system_tool_instruction, follow_up_prompt=next_suggestion, **AGENTMAKE_CONFIG)
+                        if config.light:
+                            this_messages = get_lite_messages(messages, original_request)
+                        else:
+                            this_messages = [{"role": "system", "content": system_tool_instruction}]+messages[len(DEFAULT_MESSAGES):]
+                        next_step_output = agentmake(this_messages, system=system_tool_instruction, follow_up_prompt=next_suggestion, **AGENTMAKE_CONFIG)
                         next_step = next_step_output[-1].get("content", "").strip()
                 try:
                     await thinking(get_next_step, "Crafting the next instruction ...")
