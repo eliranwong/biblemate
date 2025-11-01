@@ -4,7 +4,7 @@
 
 Developer: Eliran Wong
 
-<img width="1732" height="1302" alt="Image" src="https://github.com/user-attachments/assets/cb19d61a-2492-474d-b67a-ef2c59c7bcff" />
+[![Watch the video](https://img.youtube.com/vi/BxpLmpCm4QU/maxresdefault.jpg)](https://youtu.be/BxpLmpCm4QU)
 
 ## Other Languages
 
@@ -16,7 +16,7 @@ Simplified Chinese version: https://github.com/eliranwong/biblematesc
 
 English:
 
-[![Watch the video](https://img.youtube.com/vi/BxpLmpCm4QU/maxresdefault.jpg)](https://youtu.be/BxpLmpCm4QU)
+[![Watch the video](https://img.youtube.com/vi/L3EY1iDx8lQ/maxresdefault.jpg)](https://youtu.be/L3EY1iDx8lQ)
 
 Mandarin:
 
