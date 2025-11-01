@@ -245,6 +245,9 @@ BIBLEMATE_VERSION = readTextFile(os.path.join(os.path.dirname(os.path.realpath(_
 BIBLEMATEDATA = os.path.join(AGENTMAKE_USER_DIR, "biblemate", "data")
 if not os.path.isdir(BIBLEMATEDATA):
     Path(BIBLEMATEDATA).mkdir(parents=True, exist_ok=True)
+BIBLEMATETEMP = os.path.join(os.path.dirname(os.path.realpath(__file__)), "temp")
+if not os.path.isdir(BIBLEMATETEMP):
+    Path(BIBLEMATETEMP).mkdir(parents=True, exist_ok=True)
 DIALOGS = TerminalModeDialogs()
 
 def fix_string(content):

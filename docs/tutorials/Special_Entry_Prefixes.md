@@ -1,4 +1,4 @@
-# ✨ Special Entry Prefixes
+# 🏷️ Special Entry Prefixes
 
 In addition to [keyboard shortcuts](https://github.com/eliranwong/biblemate/blob/main/docs/tutorials/Key_Bindings.md), the following entry prefixes the following entry prefixes function universally across all AI modes:
 

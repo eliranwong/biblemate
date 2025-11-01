@@ -216,7 +216,7 @@ def backup_conversation(messages, master_plan, console=None, storage_path=None, 
                     timestamp += "_"+sanitize_filename(title)[:50].replace(" ", "_")
                 storage_path = os.path.join(AGENTMAKE_USER_DIR, "biblemate", "chats", timestamp)
             else:
-                storage_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "temp")
+                storage_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), f"temp_{config.backend}")
         # create directory if not exists
         if not os.path.isdir(storage_path):
             Path(storage_path).mkdir(parents=True, exist_ok=True)
@@ -700,7 +700,7 @@ async def main_async():
                 else:
                     user_request = f".open {chats_path}"
             elif user_request == ".reload":
-                temp_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "temp")
+                temp_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), f"temp_{config.backend}")
                 last_saved_conversation = os.path.join(temp_dir, "conversation.py")
                 if os.path.isfile(last_saved_conversation):
                     user_request = f".import {temp_dir}"
