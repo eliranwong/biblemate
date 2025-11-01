@@ -126,6 +126,7 @@ Enter your request in the BibleMate AI prompt.
 
 - Press `Ctrl+S` to submit your request.
 - Press `Ctrl+Y` to display help information.
+- Press `Ctrl+Q` to exit the BibleMate AI prompt.
 
 ### Set up virtual environment
 
@@ -321,6 +322,7 @@ The '@@' trick works even when you are using 'chat' mode with 'agent' mode disab
 | `.content`           | Show current directory content     |
 | `.open`              | Open file or directory             |
 | `.ideas`             | Generate ideas                     |
+| `.autotool`          | Toggle auto tool selection         |
 | `.autosuggest`       | Toggle auto input suggestions      |
 | `.autoprompt`        | Toggle auto prompt engineering     |
 | `.light`             | Toggle light context               |
@@ -361,6 +363,7 @@ Key bindings `Ctrl+B`, `Ctrl+C`, `Ctrl+V` and `Ctrl+X` are designed for opening 
 
 ### Remarks:
 
+* Enter `.` to open action menu for selecting an action.
 * Use `.light` to enable or disable *light context*. When *light context* is enabled (default), BibleMate operates slightly faster, with a minor trade-off in tool response quality. When *light context* is disabled, full context is used, which consumes more tokens for processing but delivers higher response quality.
 * To use `.import`, you need to specify a python file that contains a saved conversation.  Conversation is saved into a file each time when a backup is executed. Check the message `Conversation backup saved to ...` or locate the backups in `~/agentmake/computemate`. Instead of loading a mere conversation, you can load both a conversation and its master plan. To do so, specify a backup directory path that contains both `conversation.py` and `master_plan.md`.
 * To use `.open`, you need to specify a file or a directory that is to be opened.
@@ -370,8 +373,80 @@ Key bindings `Ctrl+B`, `Ctrl+C`, `Ctrl+V` and `Ctrl+X` are designed for opening 
 * Command `.matches` works for local MCP connection only.  It doesn't apply to remote MCP connection, as the changes in local settings does not affect the settings in remote servers.
 * Start your requests with `.` to retrieve bible verses or chapters, or perform a bible search directly, when the content following the `.` does not match the action commands listed above. For examples:
     - Enter `.John 3:16` to read the verse John 3:16
+    - Enter `.John 3:16; Rm 5:8` to read the verse John 3:16 and Romans 5:8
     - Enter `.John 3` to read John chapter 3
+    - Enter `.John 3, 4` to read John chapter 3 and 4
     - Enter `.Jesus love` to perform a bible search for `Jesus love`
+
+## ✨ Special Entry Prefixes
+
+In addition to [keyboard shortcuts](https://github.com/eliranwong/biblemate#%EF%B8%8F-keyboard-shortcuts), the following entry prefixes the following entry prefixes function universally across all AI modes:
+
+---
+
+**Prefix** `.`
+
+Run pre-defined features
+
+Read https://github.com/eliranwong/biblemate#-action-menu
+
+---
+
+**Prefix** `\`
+
+Use the `@get_direct_text_response` tool to receive direct text-based responses from the AI, bypassing other tools.
+
+Even when `auto tool selection` is enabled (e.g., in `chat`, `partner`, or `agent` mode), this prefix allows you to bypass automatic tool selection and get a direct response from the AI assistant.
+
+For example:
+
+> \\How many books in the Old Testament?
+
+> \\How many books in the New Testament?
+
+---
+
+**Prefix** `/`
+
+Run built-in plans
+
+Read https://github.com/eliranwong/biblemate#built-in-plans
+
+---
+
+**Prefix** `//`
+
+Run UniqueBible App features
+
+Read https://github.com/eliranwong/biblemate#%EF%B8%8F-uniquebible-resources
+
+---
+
+**Prefix** `@`
+
+Run a particular tool
+
+Read https://github.com/eliranwong/biblemate#%EF%B8%8F-single-tool-selection
+
+---
+
+**Prefix** `@@`
+
+Run custom plan
+
+Read https://github.com/eliranwong/biblemate#-custom-master-plan
+
+---
+
+**Prefix** `!`
+
+Runs system commands, for examples:
+
+> !pwd
+
+> !echo "BibleMate AI"
+
+---
 
 ## ✝️ UniqueBible Resources
 
