@@ -6,6 +6,8 @@ Developer: Eliran Wong
 
 [![Watch the video](https://img.youtube.com/vi/BxpLmpCm4QU/maxresdefault.jpg)](https://youtu.be/BxpLmpCm4QU)
 
+https://youtu.be/BxpLmpCm4QU
+
 ## Other Languages
 
 Traditional Chinese version: https://github.com/eliranwong/biblematetc
@@ -14,15 +16,15 @@ Simplified Chinese version: https://github.com/eliranwong/biblematesc
 
 ## 👀 An Overview
 
-English:
+English: https://youtu.be/L3EY1iDx8lQ
 
 [![Watch the video](https://img.youtube.com/vi/L3EY1iDx8lQ/maxresdefault.jpg)](https://youtu.be/L3EY1iDx8lQ)
 
-Mandarin:
+Mandarin: https://youtu.be/BL8HXBFqmvE
 
 [![Mandarin](https://img.youtube.com/vi/BL8HXBFqmvE/maxresdefault.jpg)](https://youtu.be/BL8HXBFqmvE)
 
-Cantonese:
+Cantonese: https://youtu.be/MmRR3uMQPd8
 
 [![Cantonese](https://img.youtube.com/vi/MmRR3uMQPd8/maxresdefault.jpg)](https://youtu.be/MmRR3uMQPd8)
 
