@@ -5,7 +5,7 @@ BibleMate AI supports over a dozen AI providers, such as OpenAI, Google Gemini, 
 BibleMate AI runs on Windows 11, macOS, Linux, ChromeOS, and Android. The basic steps involve the following three:
 
 1. [Register for an AI cloud provider service](https://github.com/eliranwong/biblemate/blob/main/docs/installation/macOS.md#%E7%AC%AC%E4%B8%80%E6%AD%A5---%E7%94%B3%E8%AB%8B-google-gemini-api-keys%E5%85%8D%E8%B2%BB) (this step can be skipped if you have a powerful computer).
-2. [Install Python 3.8-3.12](https://github.com/eliranwong/biblemate/blob/main/docs/installation/macOS.md#%E7%AC%AC%E4%BA%8C%E6%AD%A5---%E5%AE%89%E8%A3%9D-python) (Linux systems usually have Python pre-installed, so this step might be skippable).
+2. [Install Python 3.10-3.12](https://github.com/eliranwong/biblemate/blob/main/docs/installation/macOS.md#%E7%AC%AC%E4%BA%8C%E6%AD%A5---%E5%AE%89%E8%A3%9D-python) (Linux systems usually have Python pre-installed, so this step might be skippable).
 3. [Install BibleMate AI](https://github.com/eliranwong/biblemate/blob/main/docs/installation/macOS.md#%E7%AC%AC%E4%B8%89%E6%AD%A5---%E5%AE%89%E8%A3%9D-biblemate-ai-%E4%B8%AD%E6%96%87%E7%89%88)
 
 ## Step 1 - Apply for Google Gemini API Keys (Free)
@@ -32,10 +32,10 @@ Notes:
 
 ## Step 2 - Install Python
 
-1. Open [https://python.org](https://python.org), select `Downloads` -> `macOS`. Do not download version 3.14 directly; BibleMate AI currently only supports Python versions 3.9-3.12.
+1. Open [https://python.org](https://python.org), select `Downloads` -> `macOS`. Do not download version 3.14 directly; BibleMate AI currently only supports Python versions 3.10-3.12.
 <img width="1503" height="660" alt="Image" src="https://github.com/user-attachments/assets/81f0eb85-20ea-4480-8ff5-17c0d4dac0e6" />
 
-2. Select Download [macOS 64-bit universal2 installer](https://www.python.org/ftp/python/3.12.10/python-3.12.10-macos11.pkg). You can also choose other versions, but they must be within the 3.9-3.12 range.
+2. Select Download [macOS 64-bit universal2 installer](https://www.python.org/ftp/python/3.12.10/python-3.12.10-macos11.pkg). You can also choose other versions, but they must be within the 3.10-3.12 range.
 <img width="987" height="865" alt="Image" src="https://github.com/user-attachments/assets/b3c7bcbb-da7e-4590-8d74-cce13a269605" />
 
 3. After downloading, find the new file in your computer's Downloads folder, double-click to open it, and follow the instructions to install.
