@@ -50,12 +50,6 @@ Cantonese: https://youtu.be/MmRR3uMQPd8
 - 3.11
 - 3.12
 
-## 🎬 Demo - Agent Mode
-
-[![Watch the video](https://img.youtube.com/vi/QvPIyHOhrP0/maxresdefault.jpg)](https://youtu.be/QvPIyHOhrP0)
-
-Another example: [In-depth study on Revelation chapter 7](https://github.com/eliranwong/biblemate/blob/main/test/In-depth_study_on_Revelation_7.md)
-
 ## 🧩 Agentic Workflow
 
 1.  **BibleMate AI** receives a request from a user.
