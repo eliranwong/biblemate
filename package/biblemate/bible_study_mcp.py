@@ -1,12 +1,14 @@
-import logging, json, os
+import logging, json, os, re
 from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
 from fastmcp.server.auth.providers.jwt import JWTVerifier
 from fastmcp import FastMCP
 from fastmcp.prompts.prompt import PromptMessage, TextContent
 from agentmake import agentmake, DEVELOPER_MODE
+from agentmake.plugins.uba.lib.BibleParser import BibleVerseParser
 from biblemate import BIBLEMATE_VERSION, BIBLEMATEDATA, AGENTMAKE_CONFIG, config
 from biblemate.uba.bible import search_bible
 from biblemate.uba.api import run_uba_api, run_uba_ai_commentary, run_uba_words, run_uba_discourse, run_uba_translation, run_uba_index
+from biblemate.uba.search import UBASearches
 from typing import List, Dict, Any, Union
 
 THIS_BACKEND = config.backend if hasattr(config, "backend") else os.getenv("DEFAULT_AI_BACKEND") if os.getenv("DEFAULT_AI_BACKEND") else "googleai"
@@ -39,10 +41,12 @@ mcp = FastMCP(name="BibleMate AI", auth=verifier)
 def getResponse(messages:list) -> str:
     return messages[-1].get("content") if messages and "content" in messages[-1] else "Error!"
 
+# Note: Declare global variables used in MCP resources, tools or prompts, so that they work when MCP is run in http transport mode
+
 @mcp.resource("resource://info")
 def info() -> str:
     """Display BibleMate AI information"""
-    global THIS_BACKEND
+    global THIS_BACKEND, BIBLEMATE_VERSION
     info = "BibleMate AI " + BIBLEMATE_VERSION
     info += "\n\nSource: https://github.com/eliranwong/biblemate\n\nDeveloper: Eliran Wong"
     info += f"\n\nAI Backend: {THIS_BACKEND}"
@@ -51,25 +55,28 @@ def info() -> str:
 @mcp.resource("uba://{command}")
 def uba(command:str) -> str:
     """Execute an UBA command; a valid UBA command must be given, e.g. `//uba/John 3:16`; do not use this prompt if you are not sure what you are doing"""
+    global run_uba_api
     return run_uba_api(command)
 
 if DEVELOPER_MODE:
     @mcp.resource("resource://audio")
     def audio() -> str:
         """Bible Audio"""
+        global run_uba_api, json
         resources = json.loads(run_uba_api(".resources"))
         return "\n".join([f"- `{r}`" for r in resources["bibleAudioModules"]])
 
 @mcp.resource("resource://bibles")
 def bibles() -> dict:
     """Bibles; prompt examples: `//bible/John 3:16-18`, `//bible/KJV/John 3:16-18; Deut 6:4`"""
+    global run_uba_api, json
     resources = json.loads(run_uba_api(".resources"))
     return dict(zip(resources["bibleListAbb"], resources["bibleList"]))
 
 @mcp.resource("bible://{module}/{reference}")
 def bible(module:str, reference:str) -> str:
     """Bible; prompt examples: `//bible/John 3:16-18`, `//bible/KJV/John 3:16-18; Deut 6:4`"""
-    from agentmake.plugins.uba.lib.BibleParser import BibleVerseParser
+    global BibleVerseParser, run_uba_api
     reference = BibleVerseParser(False).extractAllReferencesReadable(reference)
     if not reference:
         return "Please provide a valid Bible reference to complete your request."
@@ -78,8 +85,7 @@ def bible(module:str, reference:str) -> str:
 @mcp.resource("chapter://{module}/{reference}")
 def chapter(module:str, reference:str) -> str:
     """retrieve a whole Bible chapter; bible chapter reference must be given, e.g. John 3"""
-    from agentmake.plugins.uba.lib.BibleParser import BibleVerseParser
-    import re
+    global BibleVerseParser, run_uba_api, re
     refs = re.sub("[Cc]hapter ([0-9])", r"\1", reference)
     refs = BibleVerseParser(False).extractAllReferencesReadable(refs)
     if not refs:
@@ -92,59 +98,70 @@ def chapter(module:str, reference:str) -> str:
 @mcp.resource("resource://commentaries")
 def commentaries() -> dict:
     """Commentaries; prompt examples: `//commentary/John 3:16`, `//commentary/CBSC/John 3:16`"""
+    global run_uba_api, json
     resources = json.loads(run_uba_api(".resources"))
     return dict(zip(resources["commentaryListAbb"], resources["commentaryList"]))
 
 @mcp.resource("commentary://{module}/{reference}")
 def commentary(module:str, reference:str) -> str:
     """Commentary; prompt examples: `//commentary/John 3:16`, `//commentary/CBSC/John 3:16`"""
+    global run_uba_api
     return run_uba_api(f"COMMENTARY:::{module}:::{reference}")
 
 @mcp.resource("aicommentary://{reference}")
 def aicommentary(reference:str) -> str:
     """AI Commentary; prompt examples: `//aicommentary/John 3:16`, `//aicommentary/Deut 6:4`"""
+    global run_uba_ai_commentary
     return run_uba_ai_commentary(reference)
 
 @mcp.resource("translation://{reference}")
 def translation(reference:str) -> str:
     """Retrieve interlinear, literal and dynamic translations; prompt examples: `//translation/John 3:16`, `//translation/Deut 6:4`"""
+    global run_uba_translation
     return run_uba_translation(reference)
 
 @mcp.resource("discourse://{reference}")
 def discourse(reference:str) -> str:
     """Retrieve discourse analysis of bible verses; prompt examples: `//discourse/John 3:16`, `//discourse/Deut 6:4`"""
+    global run_uba_discourse
     return run_uba_discourse(reference)
 
 @mcp.resource("morphology://{reference}")
 def morphology(reference:str) -> str:
     """Retrieve morphology data of bible verses; prompt examples: `//morphology/John 3:16`, `//morphology/Deut 6:4`"""
+    global run_uba_words
     return run_uba_words(reference)
 
 @mcp.resource("index://{reference}")
 def index(reference:str) -> str:
     """Retrieve bible verse study indexes; prompt examples: `//morphology/John 3:16`, `//morphology/Deut 6:4`"""
+    global run_uba_index
     return run_uba_index(reference)
 
 @mcp.resource("xref://{module}/{reference}")
 def xref(module:str, reference:str) -> str:
     """Cross-Reference; prompt examples: `//xref/John 3:16`, `//xref/Deut 6:4`"""
+    global run_uba_api
     return run_uba_api(f"CROSSREFERENCE:::{module}:::{reference}")
 
 @mcp.resource("treasury://{module}/{reference}")
 def treasury(module:str, reference:str) -> str:
     """Treasury of Scripture Knowledge (Enhance); prompt examples: `//treasury/John 3:16`, `//treasury/Deut 6:4`"""
+    global run_uba_api
     return run_uba_api(f"TSKE:::{module}:::{reference}")
 
 if DEVELOPER_MODE:
     @mcp.resource("resource://data")
     def data() -> str:
         """Data; UBA command example: `DATA:::Bible Chronology`"""
+        global run_uba_api, json
         resources = json.loads(run_uba_api(".resources"))
         return "\n".join([f"- `{r}`" for r in resources["dataList"]])
 
 @mcp.resource("resource://dictionaries")
 def dictionaries() -> dict:
     """Dictionaries; prompt examples: `//dictionary/Jesus`, `//dictionary/Israel`"""
+    global run_uba_api, json
     resources = json.loads(run_uba_api(".resources"))
     return dict(zip(resources["dictionaryListAbb"], resources["dictionaryList"]))
 
@@ -153,8 +170,8 @@ if os.path.isfile(dictionary_db):
     @mcp.resource("dictionary://{query}")
     def dictionary(query:str) -> Union[str, list]:
         """Dictionary; prompt examples: `//dictionary/Jesus`, `//dictionary/Israel`"""
-        from biblemate.uba.search import UBASearches
-        dictionary_db = os.path.join(BIBLEMATEDATA, "dictionary.db")
+        global UBASearches, dictionary_db, config
+        dictionary_db = dictionary_db
         return UBASearches.search_data(
             db_file=dictionary_db,
             sql_table="Dictionary",
@@ -166,12 +183,14 @@ if DEVELOPER_MODE:
     @mcp.resource("resource://docs")
     def docs() -> str:
         """Documents"""
+        global run_uba_api, json
         resources = json.loads(run_uba_api(".resources"))
         return "\n".join([f"- `{r}`" for r in resources["docxList"]])
 
 @mcp.resource("resource://encyclopedias")
 def encyclopedias() -> dict:
     """Encyclopedias; prompt examples: `//encyclopedia/Jesus`, `//encyclopedia/ISB/Jesus`"""
+    global run_uba_api, json
     resources = json.loads(run_uba_api(".resources"))
     return dict(zip(resources["encyclopediaListAbb"], resources["encyclopediaList"]))
 
@@ -180,8 +199,7 @@ if os.path.isfile(encyclopedia_db):
     @mcp.resource("encyclopedia://{module}/{query}")
     def encyclopedia(module: str, query:str) -> Union[str, list]:
         """Encyclopedia; prompt examples: `//encyclopedia/Jesus`, `//encyclopedia/ISB/Jesus`"""
-        from biblemate.uba.search import UBASearches
-        encyclopedia_db = os.path.join(BIBLEMATEDATA, "encyclopedia.db")
+        global UBASearches, encyclopedia_db, config
         return UBASearches.search_data(
             db_file=encyclopedia_db,
             sql_table=module,
@@ -193,19 +211,21 @@ if DEVELOPER_MODE:
     @mcp.resource("resource://epubs")
     def epubs() -> str:
         """EPUBs"""
+        global run_uba_api, json
         resources = json.loads(run_uba_api(".resources"))
         return "\n".join([f"- `{r}`" for r in resources["epubList"]])
 
 @mcp.resource("resource://lexicons")
 def lexicons() -> str:
     """Lexicons; prompt examples: `//lexicon/G25`, `//lexicon/TBESH/G25`, `//lexicon/TBESH/H3478`"""
+    global run_uba_api, json
     resources = json.loads(run_uba_api(".resources"))
     return "\n".join([f"- `{r}`" for r in resources["lexiconList"]])
 
 @mcp.resource("lexicon://{module}/{entry}")
 def lexicon(module:str, entry:str) -> str:
     """Lexicon; ; prompt examples: `//lexicon/G25`, `//lexicon/TBESH/G25`, `//lexicon/TBESH/H3478`"""
-    import re
+    global run_uba_api, re
     command = f"LEXICON:::{module}:::{entry}"
     content = run_uba_api(command)
     content = content.replace("\n", "\n- ")
@@ -216,24 +236,28 @@ if DEVELOPER_MODE:
     @mcp.resource("resource://references")
     def references() -> str:
         """Reference Books"""
+        global run_uba_api, json
         resources = json.loads(run_uba_api(".resources"))
         return "\n".join([f"- `{r}`" for r in resources["referenceBookList"]])
 
     @mcp.resource("resource://pdfs")
     def pdfs() -> str:
         """PDFs"""
+        global run_uba_api, json
         resources = json.loads(run_uba_api(".resources"))
         return "\n".join([f"- `{r}`" for r in resources["pdfList"]])
 
     @mcp.resource("resource://searchtools")
     def searchtools() -> str:
         """Search Tools"""
+        global run_uba_api, json
         resources = json.loads(run_uba_api(".resources"))
         return "\n".join([f"- `{r}`" for r in resources["searchToolList"]])
 
 @mcp.resource("resource://strongs")
 def strongs() -> str:
     """Strong's Bibles; UBA command example: `BIBLE:::KJVx:::John 3:16`"""
+    global run_uba_api, json
     resources = json.loads(run_uba_api(".resources"))
     return "\n".join([f"- `{r}`" for r in resources["strongBibleListAbb"]])
 
@@ -241,12 +265,14 @@ if DEVELOPER_MODE:
     @mcp.resource("resource://thirddicts")
     def thirddicts() -> str:
         """Third-Party Dictionaries; UBA command examples: `SEARCHTHIRDDICTIONARY:::faith`, `SEARCHTHIRDDICTIONARY:::webster:::faith`"""
+        global run_uba_api, json
         resources = json.loads(run_uba_api(".resources"))
         return "\n".join([f"- `{r}`" for r in resources["thirdPartyDictionaryList"]])
 
 @mcp.resource("resource://topics")
 def topics() -> dict:
     """Topical Collections; prompt examples: `//topic/faith`, `//topic/hope`, `//topic/love`"""
+    global run_uba_api, json
     resources = json.loads(run_uba_api(".resources"))
     return dict(zip(resources["topicListAbb"], resources["topicList"]))
 
@@ -255,8 +281,7 @@ if os.path.isfile(collection_db):
     @mcp.resource("parallel://{module}/{query}")
     def parallel(module:str, query:str) -> Union[str, list]:
         """Bible Parallels; prompt examples: `//parallel/baptism`, `//parallel/NET/light`, `//parallel/KJV/sermon`"""
-        from biblemate.uba.search import UBASearches
-        collection_db = os.path.join(BIBLEMATEDATA, "collection.db")
+        global UBASearches, collection_db, config
         return UBASearches.search_data(
             db_file=collection_db,
             sql_table="PARALLEL",
@@ -267,8 +292,7 @@ if os.path.isfile(collection_db):
     @mcp.resource("promise://{module}/{query}")
     def promise(module:str, query:str) -> Union[str, list]:
         """Bible Promises; prompt examples: `//promise/faith`, `//promise/NET/hope`, `//promise/KJV/love`"""
-        from biblemate.uba.search import UBASearches
-        collection_db = os.path.join(BIBLEMATEDATA, "collection.db")
+        global UBASearches, collection_db, config
         return UBASearches.search_data(
             db_file=collection_db,
             sql_table="PROMISES",
@@ -282,8 +306,7 @@ if os.path.isfile(topic_db):
     @mcp.resource("topic://{query}")
     def topic(query:str) -> Union[str, list]:
         """Topical Studies; prompt examples: `//topic/faith`, `//topic/hope`, `//topic/love`"""
-        from biblemate.uba.search import UBASearches
-        topic_db = os.path.join(BIBLEMATEDATA, "exlb.db")
+        global UBASearches, topic_db, config
         return UBASearches.search_data(
             db_file=topic_db,
             sql_table="exlbt",
@@ -293,8 +316,7 @@ if os.path.isfile(topic_db):
     @mcp.resource("name://{query}")
     def name(query:str) -> Union[str, list]:
         """Bible Names; prompt examples: `//name/Jesus`, `//name/Bethlehem`"""
-        from biblemate.uba.search import UBASearches
-        topic_db = os.path.join(BIBLEMATEDATA, "exlb.db")
+        global UBASearches, topic_db, config
         return UBASearches.search_data(
             db_file=topic_db,
             sql_table="exlbn",
@@ -304,8 +326,7 @@ if os.path.isfile(topic_db):
     @mcp.resource("character://{query}")
     def character(query:str) -> Union[str, list]:
         """Character Studies; prompt examples: `//character/Jesus`, `//character/Samuel`, `//topic/John`"""
-        from biblemate.uba.search import UBASearches
-        topic_db = os.path.join(BIBLEMATEDATA, "exlb.db")
+        global UBASearches, topic_db, config
         return UBASearches.search_data(
             db_file=topic_db,
             sql_table="exlbp",
@@ -315,8 +336,7 @@ if os.path.isfile(topic_db):
     @mcp.resource("location://{query}")
     def location(query:str) -> Union[str, list]:
         """Location Studies; prompt examples: `//location/Jerusalem`, `//location/Bethel`, `//location/Bethlehem`"""
-        from biblemate.uba.search import UBASearches
-        topic_db = os.path.join(BIBLEMATEDATA, "exlb.db")
+        global UBASearches, topic_db, config
         return UBASearches.search_data(
             db_file=topic_db,
             sql_table="exlbl",
@@ -1131,7 +1151,7 @@ def search_revelation_only(request:str) -> str:
 @mcp.tool
 def compare_bible_translations(request:str) -> str:
     """compare Bible translations; bible verse reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'input_content_plugin': 'uba/every_single_ref', 'tool': 'uba/compare'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
@@ -1143,28 +1163,28 @@ def retrieve_bible_study_indexes(request:str) -> str:
 @mcp.tool
 def retrieve_bible_cross_references(request:str) -> str:
     """retrieve cross-references of Bible verses; bible verse reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'input_content_plugin': 'uba/every_single_ref', 'tool': 'uba/xref'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def retrieve_pointed_hebrew_or_accented_greek_bible_verses(request:str) -> str:
     """retrieve Hebrew (with pointed vowels) or Greek (with accents) Bible verses; bible verse reference(s) must be given, e.g. John 3:16-17; single or multiple references accepted, e.g. Deut 6:4; Gen 1:26-27"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'tool': 'uba/ohgb'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def retrieve_hebrew_or_greek_bible_verses(request:str) -> str:
     """retrieve Hebrew (without pointed vowels) or Greek (without accents) Bible verses; bible verse reference(s) must be given, e.g. John 3:16-17; single or multiple references accepted, e.g. Deut 6:4; Gen 1:26-27"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'tool': 'uba/mob'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def retrieve_bible_verses(request:str) -> str:
     """retrieve Bible verses; bible verse reference(s) must be given, e.g. John 3:16-17; single or multiple references accepted, e.g. Deut 6:4; Gen 1:26-27"""
-    from agentmake.plugins.uba.lib.BibleParser import BibleVerseParser
+    global BibleVerseParser, run_uba_api
     refs = BibleVerseParser(False).extractAllReferencesReadable(request)
     if not refs:
         return "Please provide a valid Bible reference to complete your request."
@@ -1173,24 +1193,26 @@ def retrieve_bible_verses(request:str) -> str:
 @mcp.tool
 def retrieve_verse_translations(request:str) -> str:
     """retrieve interlinear Hebrew or Greek, together with both literal and dynamic translations of inidividual bible verses; bible verse; bible verse reference(s) must be given, e.g. John 3:16-17; single or multiple references accepted, e.g. Deut 6:4; Gen 1:26-27"""
+    global run_uba_translation
     return run_uba_translation(request)
 
 @mcp.tool
 def retrieve_verse_discourse(request:str) -> str:
     """retrieve discourse analysis of inidividual bible verses; bible verse; bible verse reference(s) must be given, e.g. John 3:16-17; single or multiple references accepted, e.g. Deut 6:4; Gen 1:26-27"""
+    global run_uba_discourse
     return run_uba_discourse(request)
 
 
 @mcp.tool
 def retrieve_verse_morphology(request:str) -> str:
     """retrieve parsing and morphology of individual bible verses; bible verse reference(s) must be given, e.g. John 3:16-17; single or multiple references accepted, e.g. Deut 6:4; Gen 1:26-27"""
+    global run_uba_words
     return run_uba_words(request)
 
 @mcp.tool
 def retrieve_bible_chapter(request:str) -> str:
     """retrieve a whole Bible chapter; bible chapter reference must be given, e.g. John 3"""
-    from agentmake.plugins.uba.lib.BibleParser import BibleVerseParser
-    import re
+    global BibleVerseParser, run_uba_api, re
     refs = re.sub("[Cc]hapter ([0-9])", r"\1", request)
     refs = BibleVerseParser(False).extractAllReferencesReadable(refs)
     if not refs:
@@ -1203,278 +1225,279 @@ def retrieve_bible_chapter(request:str) -> str:
 @mcp.tool
 def read_bible_commentary(request:str) -> str:
     """read bible commentary on individual bible verses; bible verse reference(s) must be given, like , like John 3:16 or John 3:16-18"""
+    global run_uba_ai_commentary
     return run_uba_ai_commentary(request)
 
 @mcp.tool
 def refine_bible_translation(request:List[Dict[str, Any]]) -> str:
     """refine the translation of a Bible verse or passage"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'system': 'bible/translate'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_pastor_prayer(request:List[Dict[str, Any]]) -> str:
     """write a prayer, out of a church pastor heart, based on user input"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'system': 'bible/pray'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def ask_theologian(request:List[Dict[str, Any]]) -> str:
     """ask a theologian about the bible"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'system': 'bible/theologian'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def quote_bible_verses(request:List[Dict[str, Any]]) -> str:
     """quote multiple bible verses in response to user request"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'system': 'bible/quote'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def anyalyze_psalms(request:List[Dict[str, Any]]) -> str:
     """analyze the context and background of the Psalms in the bible; Psalm reference must be given, e.g. Psalm 23:1-3"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'system': 'bible/david'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def ask_pastor(request:List[Dict[str, Any]]) -> str:
     """ask a church pastor about the bible"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'system': 'bible/billy'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def ask_bible_scholar(request:List[Dict[str, Any]]) -> str:
     """ask a bible scholar about the bible"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'system': 'bible/scholar'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def explain_bible_meaning(request:List[Dict[str, Any]]) -> str:
     """Explain the meaning of the user-given content in reference to the Bible"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/meaning', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_new_testament_historical_context(request:List[Dict[str, Any]]) -> str:
     """write the Bible Historical Context of a New Testament passage in the bible; new testament bible book / chapter / passage / reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/nt_context', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_bible_questions(request:List[Dict[str, Any]]) -> str:
     """Write thought-provoking questions for bible study group discussion; bible book / chapter / passage / reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/questions', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_bible_devotion(request:List[Dict[str, Any]]) -> str:
     """Write a devotion on a bible passage; bible book / chapter / passage / reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/devotion', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def translate_hebrew_bible_verse(request:List[Dict[str, Any]]) -> str:
     """Translate a Hebrew bible verse; Hebrew bible text must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/translate_hebrew', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_bible_location_study(request:List[Dict[str, Any]]) -> str:
     """write comprehensive information on a bible location; a bible location name must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/location', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def translate_greek_bible_verse(request:List[Dict[str, Any]]) -> str:
     """Translate a Greek bible verse: Greek bible text must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/translate_greek', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def identify_bible_keywords(request:List[Dict[str, Any]]) -> str:
     """Identify bible key words from the user-given content"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/keywords', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def study_old_testament_themes(request:List[Dict[str, Any]]) -> str:
     """Study Bible Themes in a Old Testament passage; old testatment bible book / chapter / passage / reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/ot_themes', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def study_new_testament_themes(request:List[Dict[str, Any]]) -> str:
     """Study Bible Themes in a New Testament passage; new testament bible book / chapter / passage / reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/nt_themes', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_old_testament_highlights(request:List[Dict[str, Any]]) -> str:
     """Write Highlights in a Old Testament passage in the bible; old testament bible book / chapter / passage / reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/ot_highligths', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_bible_prayer(request:List[Dict[str, Any]]) -> str:
     """Write a prayer pertaining to the user content in reference to the Bible"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/prayer', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_short_bible_prayer(request:List[Dict[str, Any]]) -> str:
     """Write a short prayer, in one paragraph only, pertaining to the user content in reference to the Bible"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/short_prayer', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_bible_character_study(request:List[Dict[str, Any]]) -> str:
     """Write comprehensive information on a given bible character in the bible; a bible character name must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/character', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_bible_thought_progression(request:List[Dict[str, Any]]) -> str:
     """write Bible Thought Progression of a bible book / chapter / passage; bible book / chapter / passage / reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/flow', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def quote_bible_promises(request:List[Dict[str, Any]]) -> str:
     """Quote relevant Bible promises in response to user request"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/promises', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_bible_chapter_summary(request:List[Dict[str, Any]]) -> str:
     """Write a detailed interpretation on a bible chapter; a bible chapter must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/chapter_summary', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_bible_perspectives(request:List[Dict[str, Any]]) -> str:
     """Write biblical perspectives and principles in relation to the user content"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'system': 'bible/perspective'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def interpret_old_testament_verse(request:List[Dict[str, Any]]) -> str:
     """Interpret the user-given bible verse from the Old Testament in the light of its context, together with insights of biblical Hebrew studies; an old testament bible verse / reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/ot_meaning', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def expound_bible_topic(request:List[Dict[str, Any]]) -> str:
     """Expound the user-given topic in reference to the Bible; a topic must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/topic', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_bible_theology(request:List[Dict[str, Any]]) -> str:
     """write the theological messages conveyed in the user-given content, in reference to the Bible"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/theology', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def study_bible_themes(request:List[Dict[str, Any]]) -> str:
     """Study Bible Themes in relation to the user content"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/themes', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_bible_canonical_context(request:List[Dict[str, Any]]) -> str:
     """Write about canonical context of a bible book / chapter / passage; bible book / chapter / passage / reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/canon', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_bible_related_summary(request:List[Dict[str, Any]]) -> str:
     """Write a summary on the user-given content in reference to the Bible"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/summary', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def interpret_new_testament_verse(request:List[Dict[str, Any]]) -> str:
     """Interpret the user-given bible verse from the New Testament in the light of its context, together with insights of biblical Greek studies; a new testament bible verse / reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/nt_meaning', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_new_testament_highlights(request:List[Dict[str, Any]]) -> str:
     """Write Highlights in a New Testament passage in the bible; new testament bible book / chapter / passage / reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/nt_highlights', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_bible_applications(request:List[Dict[str, Any]]) -> str:
     """Provide detailed applications of a bible passages; bible book / chapter / passage / reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/application', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_bible_book_introduction(request:List[Dict[str, Any]]) -> str:
     """Write a detailed introduction on a book in the bible; bible book must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/introduce_book', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_old_testament_historical_context(request:List[Dict[str, Any]]) -> str:
     """write the Bible Historical Context of a Old Testament passage in the bible; old testament bible book / chapter / passage / reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/ot_context', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_bible_outline(request:List[Dict[str, Any]]) -> str:
     """provide a detailed outline of a bible book / chapter / passage; bible book / chapter / passage / reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/outline', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_bible_insights(request:List[Dict[str, Any]]) -> str:
     """Write exegetical insights in detail on a bible passage; bible book / chapter / passage / reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/insights', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 
 @mcp.tool
 def write_bible_sermon(request:List[Dict[str, Any]]) -> str:
     """Write a bible sermon based on a bible passage; bible book / chapter / passage / reference(s) must be given"""
-    global agentmake, getResponse
+    global agentmake, getResponse, AGENTMAKE_CONFIG
     messages = agentmake(request, **{'instruction': 'bible/sermon', 'system': 'auto'}, **AGENTMAKE_CONFIG)
     return getResponse(messages)
 

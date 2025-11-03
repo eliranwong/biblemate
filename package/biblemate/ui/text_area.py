@@ -312,7 +312,7 @@ async def getTextArea(input_suggestions:list=None, default_entry="", title="", m
             select = await DIALOGS.getValidOptions(options=options, descriptions=descriptions, title="Conversation", text="Select an option to continue:")
             return select if select else ""
         elif result == "[SAVEPROMPT]":
-            user_input = await DIALOGS.getInputDialog(title="Save Prompt", text="Enter a name:")
+            user_input = await DIALOGS.getInputDialog(title="Save Plan" if text_area.text.startswith("@@") else "Save Prompt", text="Enter a name:")
             if user_input:
                 prompt_dir = os.path.join(BIBLEMATE_USER_DIR, "prompts")
                 plan_dir = os.path.join(BIBLEMATE_USER_DIR, "plans")
