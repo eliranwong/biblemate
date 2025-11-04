@@ -1,0 +1,82 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+}
+
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://source.unsplash.com/1600x900/?bible,study');
+    background-size: cover;
+    background-position: center;
+    padding: 200px 0;
+    color: #fff;
+}
+
+.hero-section .lead {
+    max-width: 600px;
+    margin: 0 auto 30px;
+}
+
+.section {
+    padding: 100px 0;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 60px;
+    font-weight: 600;
+    font-size: 2.5rem;
+}
+
+.feature-icon {
+    font-size: 3rem;
+    color: #0d6efd;
+}
+
+.card {
+    border: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+}
+
+#workflow ol {
+    list-style: none;
+    padding-left: 0;
+}
+
+#workflow li {
+    padding-left: 1.5em;
+    text-indent: -1.5em;
+    margin-bottom: 1rem;
+}
+
+#workflow li::before {
+    content: "✓";
+    color: #0d6efd;
+    margin-right: 0.5em;
+    font-weight: bold;
+}
+
+.mermaid {
+    margin-top: 20px;
+}
+
+#platforms i {
+    color: #495057;
+    transition: color 0.3s;
+}
+
+#platforms i:hover {
+    color: #0d6efd;
+}
+
+footer {
+    padding: 40px 0;
+}

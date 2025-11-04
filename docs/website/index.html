@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BibleMate.ai - Your Autonomous AI Bible Study Partner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">BibleMate.ai</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#demo">Demo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#workflow">Workflow</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#ai-modes">AI Modes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#quick-start">Quick Start</a></li>
+                    <li class="nav-item"><a class="nav-link btn btn-primary text-white ms-lg-2" href="https://github.com/eliranwong/biblemate" target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section text-center text-white">
+        <div class="container">
+            <h1 class="display-4 fw-bold">Revolutionize Your Bible Study with BibleMate.ai</h1>
+            <p class="lead my-4">An autonomous AI agent designed to create study plans, coordinate multiple Bible tools, and complete complex Bible-related tasks.</p>
+            <a href="#quick-start" class="btn btn-primary btn-lg">Get Started</a>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section id="features" class="section">
+        <div class="container">
+            <h2 class="section-title">Core Features</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 text-center p-4">
+                        <div class="feature-icon mb-3">✝️</div>
+                        <h3>Autonomous AI Agent</h3>
+                        <p>Works independently to fulfill your bible study requests.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 text-center p-4">
+                        <div class="feature-icon mb-3">⚙️</div>
+                        <h3>Multi-step Task Execution</h3>
+                        <p>Breaks down complex tasks into smaller, manageable steps.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 text-center p-4">
+                        <div class="feature-icon mb-3">🛠️</div>
+                        <h3>Rich Toolset</h3>
+                        <p>Comes with over 40 built-in bible tools.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Video Section -->
+    <section id="overview-video" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">An Overview</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="ratio ratio-16x9 shadow-lg rounded">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/BxpLmpCm4QU?enablejsapi=1" title="BibleMate.ai Overview Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Video Section -->
+    <section id="demo-video" class="section">
+        <div class="container">
+            <h2 class="section-title">Watch a Demo</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="ratio ratio-16x9 shadow-lg rounded">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/L3EY1iDx8lQ?enablejsapi=1" title="BibleMate.ai Demo Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section id="workflow" class="section">
+        <div class="container">
+            <h2 class="section-title">Agentic Workflow</h2>
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <ol>
+                        <li>Receives a request from a user.</li>
+                        <li>Analyzes the request and determines that it requires multiple steps to complete.</li>
+                        <li>Generates a <code>Master Plan</code> that outlines the steps needed to complete the request.</li>
+                        <li>Sends the <code>Master Plan</code> to a supervisor agent for review and suggestions.</li>
+                        <li>Sends the suggestions to a bible tool selection agent to select the most appropriate tools.</li>
+                        <li>Sends the selected tools and the <code>Master Plan</code> to an instruction generation agent.</li>
+                        <li>Sends the instructions to an AI assistant for execution.</li>
+                        <li>Monitors the progress and provides additional suggestions or instructions as needed.</li>
+                        <li>Provides a concise summary of the results to the user.</li>
+                        <li>The user receives the final response, which fully resolves their original request.</li>
+                    </ol>
+                </div>
+                <div class="col-md-6">
+                    <div class="mermaid text-center">
+graph TD
+    A[User] -- Request --> B(BibleMate AI);
+    B -- Generates Master Plan --> B;
+    B -- Master Plan --> C(Supervisor Agent);
+    C -- Suggestions --> B;
+    B -- Suggestions --> D(Bible Tool Selection Agent);
+    D -- Selected Tools --> B;
+    B -- Master Plan & Selected Tools --> E(Instruction Generation Agent);
+    E -- Instructions --> B;
+    B -- Instructions --> F(AI Assistant);
+    F -- Executes Instructions --> G((Bible Tools));
+    B -- Monitors --> F;
+    F -- Progress --> B;
+    B -- Summary --> A;
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Modes Section -->
+    <section id="ai-modes" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">AI Modes</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Chat mode</h5>
+                            <p class="card-text">Provides direct text responses without using tools, ideal for simple queries.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Agent mode</h5>
+                            <p class="card-text">A fully autonomous agent designed to plan, orchestrate tools, and take multiple actions to address user requests.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Partner mode</h5>
+                            <p class="card-text">A semi-automated mode that involves you in the process with review and edit prompts, giving you more control over the AI's actions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-10">
+                    <img src="https://github.com/user-attachments/assets/1adaee7d-4509-441e-a6a7-9bda5c38cbcf" class="img-fluid rounded shadow-lg" alt="AI Modes">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section id="quick-start" class="section">
+        <div class="container">
+            <h2 class="section-title">Quick Start</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <p>Get started with BibleMate.ai in just a few steps:</p>
+                    <pre class="bg-dark text-white p-3 rounded d-inline-block"><code>pip install --upgrade biblemate</code></pre>
+                    <p class="mt-3">To run BibleMate AI:</p>
+                    <pre class="bg-dark text-white p-3 rounded d-inline-block"><code>biblemate</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Supported Platforms Section -->
+    <section id="platforms" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">Supported Platforms</h2>
+            <div class="d-flex justify-content-center align-items-center flex-wrap">
+                <i class="fab fa-windows fa-3x mx-3"></i>
+                <i class="fab fa-apple fa-3x mx-3"></i>
+                <i class="fab fa-linux fa-3x mx-3"></i>
+                <i class="fab fa-chrome fa-3x mx-3"></i>
+                <i class="fab fa-android fa-3x mx-3"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4">
+        <div class="container">
+            <p>&copy; 2025 BibleMate.AI. All Rights Reserved.</p>
+            <p>Licensed under the Creative Commons Attribution-NonCommercial 4.0 International License.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</body>
+</html>
+                        

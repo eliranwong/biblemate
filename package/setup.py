@@ -72,13 +72,13 @@ setup(
             f"{package}mcp={package}.biblematemcp:mcp",
         ],
     },
-    keywords="mcp agent toolmate ai anthropic azure chatgpt cohere deepseek genai github googleai groq llamacpp mistral ollama openai vertexai xai",
-    url="https://toolmate.ai",
+    keywords="mcp agent biblemate ai anthropic azure chatgpt cohere deepseek genai github googleai groq llamacpp mistral ollama openai vertexai xai",
+    url="https://biblemate.ai",
     project_urls={
         "Source": "https://github.com/eliranwong/biblemate",
         "Tracker": "https://github.com/eliranwong/biblemate/issues",
         "Documentation": "https://github.com/eliranwong/biblemate/wiki",
-        "Funding": "https://www.paypal.me/toolmate",
+        "Funding": "https://www.paypal.me/MarvelBible",
     },
     classifiers=[
         # Reference: https://pypi.org/classifiers/
