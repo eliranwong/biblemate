@@ -780,7 +780,9 @@ async def main_async():
                     config.backup_required = False
                 elif user_request == ".help":
                     actions = "\n".join([f"- `{k}`: {v}" for k, v in config.action_list.items()])
-                    help_info = f"""## Readme
+                    help_info = f"""## BibleMate AI
+
+https://biblemate.ai
 
 https://github.com/eliranwong/biblemate
 

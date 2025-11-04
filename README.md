@@ -2,6 +2,8 @@
 
 **BibleMate AI** is a groundbreaking, autonomous AI agent designed to revolutionize your Bible study. It can create study plans, coordinate multiple Bible tools, and take multi-step actions to complete complex Bible-related tasks, such as conducting an in-depth study of a particular Bible passage.
 
+Website: https://biblemate.ai
+
 Developer: Eliran Wong
 
 [![Watch the video](https://img.youtube.com/vi/BxpLmpCm4QU/maxresdefault.jpg)](https://youtu.be/BxpLmpCm4QU)
@@ -32,7 +34,7 @@ Cantonese: https://youtu.be/MmRR3uMQPd8
 
 - **Autonomous AI Agent:** BibleMate AI can work independently to fulfill your bible study requests.
 - **Multi-step Task Execution:** It can break down complex tasks into smaller, manageable steps and execute them sequentially.
-- **Rich Toolset:** Comes with over 40 built-in bible tools, powered by our comprehensive bible suite, the [UniqueBible App](https://github.com/eliranwong/UniqueBible).
+- **Rich Toolset:** Comes with over 100 built-in bible tools, powered by our comprehensive bible suite, the [UniqueBible App](https://github.com/eliranwong/UniqueBible).
 - **Customizable and Extensible:** Advanced users can customize existing tools or add new ones to suit their specific needs.
 - **Flexible AI Backend:** Supports a variety of AI backends via [AgentMake AI](https://github.com/eliranwong/agentmake).
 
@@ -118,7 +120,7 @@ To switch between modes, use the `.mode` command in the BibleMate AI prompt. Thi
 
 To help users stay aware of the current AI mode, the input border color changes when switching between modes.
 
-<img width="1732" height="1258" alt="Image" src="https://github.com/user-attachments/assets/0b765955-02e5-4eee-95ca-8cdc5216dd1a" />
+<img width="866" height="629" alt="Image" src="https://github.com/user-attachments/assets/1adaee7d-4509-441e-a6a7-9bda5c38cbcf" />
 
 ## 📖 Tutorials
 
