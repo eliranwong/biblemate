@@ -62,10 +62,10 @@ bmsc
 <img width="372" height="360" alt="Image" src="https://github.com/user-attachments/assets/667f10d0-075c-478b-a2f5-717b7decd936" />
 
 4. Enter the Google Gemini API Key you applied for in the first step. If you don't want to type it character by character, you can copy the API Key first, then press `Command+V` to paste it here (please replace xxxxxxxxxxx with your valid API Key):
-<img width="1002" height="697" alt="Image" src="https://github.com/user-attachments/assets/ee882eae-514f-4406-95cf-a40d1fe632ac" />
+<img width="866" height="629" alt="Image" src="https://github.com/user-attachments/assets/d33d1f8c-d7ec-416c-acea-07072b418b83" />
 
 5. BibleMate AI supports using several API Keys in rotation (separate multiple API Keys with an English comma `,` without spaces):
-<img width="1002" height="697" alt="Image" src="https://github.com/user-attachments/assets/6520bcbf-ee7d-4727-8c1d-2fb36b7e3a69" />
+<img width="866" height="629" alt="Image" src="https://github.com/user-attachments/assets/58a9dfa4-d20b-4da0-a914-eef2ba88777e" />
 
 6. After pressing `OK` to confirm, you need to restart. In the Terminal App, type `biblemate` or `bmsc`.
 <img width="890" height="124" alt="Image" src="https://github.com/user-attachments/assets/92332717-0011-4504-8bbc-f0b38721e63f" />
@@ -79,7 +79,7 @@ bmsc
 
 1. In the Terminal app, type `biblemate` or `bmsc` to enter BibleMate AI.
 2. Enter your request, then press `Ctrl+S` to confirm and let BibleMate AI execute your request.
-<img width="1002" height="697" alt="Image" src="https://github.com/user-attachments/assets/a2f84f01-e2e4-496e-9359-b8afd5dcc583" />
+<img width="866" height="629" alt="Image" src="https://github.com/user-attachments/assets/bf3dc1af-35b3-4a36-92be-1b5180efcacf" />
 
 ## Exit Current Entry
 
@@ -88,6 +88,14 @@ Press `Ctrl+Q` to exit current entries.
 ## Use Built-in Text Editor for Editing
 
 You can press `Ctrl+O` to edit your input with the built-in text editor for more editing features via plugins.
+
+## Action Menu
+
+Enter a dot `.` in BibleMate AI prompt to open the action menu.
+
+<img width="866" height="629" alt="Image" src="https://github.com/user-attachments/assets/803fe137-5624-4ab1-91af-7c0c1d3a8921" />
+
+<img width="866" height="629" alt="Image" src="https://github.com/user-attachments/assets/818fac18-cbfd-4d5a-b837-bb0ed8919a6d" />
 
 ## Manage Conversation
 
@@ -114,14 +122,14 @@ BibleMate AI supports three AI modes - Agent, Partner, and Chat - for users to s
 * `Partner` mode (default) - Semi-automatic operation mode, where the user participates in reviewing and modifying.
 * `Chat` mode - A simple question-and-answer dialogue mode.
 
-1. Enter `.mode` to open the AI mode menu:
-<img width="1002" height="697" alt="Image" src="https://github.com/user-attachments/assets/47ecf9ed-fe07-4773-91f6-1cd9a8598d41" />
+1. Enter `.` and select `configure AI mode` to open the AI mode menu:
+<img width="866" height="629" alt="Image" src="https://github.com/user-attachments/assets/ab3c2450-8c74-4ff1-907b-d63779342e2a" />
 
 2. Choose one of the modes.
-<img width="1002" height="697" alt="Image" src="https://github.com/user-attachments/assets/13a07479-1fd9-4cac-b379-c2c16a71525b" />
+<img width="866" height="629" alt="Image" src="https://github.com/user-attachments/assets/bcfab7f0-7045-4b50-8063-49c7e5265d56" />
 
 3. After switching, enter your request, and then press `Ctrl+S` to confirm.
-<img width="1002" height="697" alt="Image" src="https://github.com/user-attachments/assets/1514558a-5d8e-472e-b06f-2fb72ebb96dd" />
+<img width="866" height="629" alt="Image" src="https://github.com/user-attachments/assets/bf3dc1af-35b3-4a36-92be-1b5180efcacf" />
 
 ## Semantic Search Support [Optional]
 
@@ -129,7 +137,7 @@ You can search various biblical resources through BibleMate AI, such as the Bibl
 
 1. Install Ollama on your computer (BibleMate AI uses Ollama to create a vector database). You can download it from https://ollama.com/download
 2. In BibleMate AI, enter the command `.download` and follow the instructions to download the additional databases.
-<img width="866" height="629" alt="Image" src="https://github.com/user-attachments/assets/1e8aa6b2-4c47-4fe0-9e9d-7d5163f88ea4" />
+<img width="866" height="629" alt="Image" src="https://github.com/user-attachments/assets/3d6e09f2-ee25-482f-91ef-19a7d756e8fc" />
 
 ## Directly Accessing Bible and Related Resources Without AI
 
@@ -138,19 +146,19 @@ BibleMate AI defaults to connecting to the [Gospel Church UK](https://bible.gosp
 Most of BibleMate AI's functions can be accessed via hotkeys, five of which are designed for quick access to Bible-related materials:
 
 `Ctrl+B` opens Bible options [Mnemonic: B -> Bible]
-<img width="1002" height="697" alt="Image" src="https://github.com/user-attachments/assets/2016b4cc-f370-4aa1-bcd9-8b8b30f8a727" />
+<img width="866" height="629" alt="Image" src="https://github.com/user-attachments/assets/d1542861-43ed-4dd1-90c9-b667eb3b3a53" />
 
 `Ctrl+C` opens the Bible commentary function [Mnemonic: C -> Commentary]
-<img width="1002" height="697" alt="Image" src="https://github.com/user-attachments/assets/9a175b0e-7385-4aaa-9f6e-00f57ae675fa" />
+<img width="866" height="629" alt="Image" src="https://github.com/user-attachments/assets/3793d413-cb31-45b3-8914-bb587903ff72" />
 
 `Ctrl+V` opens the single verse study function [Mnemonic: V -> Verse]
-<img width="1002" height="697" alt="Image" src="https://github.com/user-attachments/assets/2089542c-573d-47f7-ae57-4704295b9417" />
+<img width="866" height="629" alt="Image" src="https://github.com/user-attachments/assets/29b5f781-89ca-4aff-b03b-c2a67f8cd8aa" />
 
 `Ctrl+X` opens the cross-reference function [Mnemonic: X -> Cross-references]
-<img width="1002" height="697" alt="Image" src="https://github.com/user-attachments/assets/aa2e31fb-e89c-4af8-bd5e-53e631fc12ce" />
+<img width="866" height="629" alt="Image" src="https://github.com/user-attachments/assets/a5a2c685-b5e4-4deb-8272-8f93244d9727" />
 
 `Ctrl+F` searches the Bible database [Mnemonic: F -> Find]. This feature requires additional setup, please refer to https://github.com/eliranwong/biblemate/blob/main/docs/installation/macOS.md#%E6%94%AF%E6%8F%B4%E8%AA%9E%E7%BE%A9%E6%90%9C%E7%B4%A2-semantic-searches-optional
-<img width="1002" height="697" alt="Image" src="https://github.com/user-attachments/assets/a5005066-029f-432f-88a2-771dddd52f8f" />
+<img width="866" height="629" alt="Image" src="https://github.com/user-attachments/assets/a14e0567-d0b2-4a77-a2ee-f14ade3754b9" />
 
 ## More Shortcuts
 
