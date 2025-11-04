@@ -135,6 +135,22 @@ To help users stay aware of the current AI mode, the input border color changes 
 * ✒️ [Text Editor](https://github.com/eliranwong/biblemate/blob/main/docs/tutorials/Text_Editor.md)
 * 🛠️ [Customization](https://github.com/eliranwong/biblemate/blob/main/docs/tutorials/Customization.md)
 
+## 🎥 Videos Tutorials
+
+[Basics](https://youtu.be/BztdSG2dr0M)
+
+[Agent Mode](https://youtu.be/L3EY1iDx8lQ)
+
+[Partner Mode](https://youtu.be/teWCMkayMGE)
+
+[Use a Particular Bible Tool](https://youtu.be/rDVWRY8CNHY)
+
+[Write & Save a Custom Plan](https://youtu.be/bbVu4ecc4ug)
+
+[Direct Text Response](https://youtu.be/4q0qozxy_D0)
+
+[Direct Access to Bible Resources](https://youtu.be/R6-SH18PQZw)
+
 ## 📄 License
 
 This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License - see the [LICENSE](LICENSE) file for details.

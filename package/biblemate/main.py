@@ -784,6 +784,10 @@ async def main_async():
 
 https://github.com/eliranwong/biblemate
 
+## Tutorials
+
+https://github.com/eliranwong/biblemate/tree/main/docs/tutorials
+
 ## Key Commands
 
 {actions}

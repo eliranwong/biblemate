@@ -10,10 +10,14 @@ When `agent` or `partner` is enabled, all enabled built-in tools are considered 
 
 ## Built-in Plans
 
-Built-in plans are predefined, frequently used 'master plans' that users can quickly access. Currently, we have added two built-in plans for demonstration purposes. Users can add their own plans via [customization](https://github.com/eliranwong/biblemate#customization).
+Built-in plans are predefined, frequently used 'master plans' that users can quickly access. Currently, we have added two built-in plans for demonstration purposes.
 
 Starts your prompt with a forward slash `/` to call a plan, e.g.:
 
 > /simple_bible_study John 3:16
 
 > /bible_devotion Deut 6:4
+
+## Custom Plans
+
+Read https://github.com/eliranwong/biblemate/blob/main/docs/tutorials/Custom_Master_Plan.md

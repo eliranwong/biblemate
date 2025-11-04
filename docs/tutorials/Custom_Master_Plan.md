@@ -32,4 +32,16 @@ Ensure each step is clearly addressed and the final output is cohesive and inspi
 
 Watch this video: https://youtu.be/NYPyujFG09E
 
-The '@@' trick works even when you are using 'chat' mode with 'agent' mode disabled.
+The '@@' trick works universally across different AI modes.
+
+## Save Frequently Used Custom Plans
+
+Write a custom plan in BibleMate AI, then press `Ctrl+W` to save it.
+
+Press `Esc+W` to delete a saved plan.
+
+Press `Ctrl+L` to open a plan.
+
+Press `Esc+L` to search for plans.
+
+Watch this video: https://youtu.be/bbVu4ecc4ug
