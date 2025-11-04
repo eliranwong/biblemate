@@ -153,6 +153,8 @@ To help users stay aware of the current AI mode, the input border color changes 
 
 [Direct Access to Bible Resources](https://youtu.be/R6-SH18PQZw)
 
+[Reload an Unfinished Workflow](https://youtu.be/NHR8J935BkI)
+
 ## 📄 License
 
 This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License - see the [LICENSE](LICENSE) file for details.

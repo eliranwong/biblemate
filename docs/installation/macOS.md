@@ -68,7 +68,7 @@ bmsc
 <img width="866" height="629" alt="Image" src="https://github.com/user-attachments/assets/58a9dfa4-d20b-4da0-a914-eef2ba88777e" />
 
 6. After pressing `OK` to confirm, you need to restart. In the Terminal App, type `biblemate` or `bmsc`.
-<img width="890" height="124" alt="Image" src="https://github.com/user-attachments/assets/92332717-0011-4504-8bbc-f0b38721e63f" />
+<img width="810" height="108" alt="Image" src="https://github.com/user-attachments/assets/9ef9363a-c1a6-4750-a59f-96d55e61d0da" />
 
 ## Notes
 
