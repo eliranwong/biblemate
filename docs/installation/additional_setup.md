@@ -1,3 +1,9 @@
+# Fresh Installation
+
+Read fresh installation instructions at https://github.com/eliranwong/biblemate/blob/main/docs/installation/macOS.md
+
+## Additional Setup
+
 ### Set up virtual environment
 
 For example:
