@@ -3,6 +3,15 @@ from pathlib import Path
 from biblemate import config
 from biblemate.ui.selection_dialog import TerminalModeDialogs
 import os, shutil, pprint
+import warnings
+
+# Filter out the specific RuntimeWarning from the 'agentmake' module
+warnings.filterwarnings(
+    "ignore", 
+    message="coroutine '.*' was never awaited", 
+    category=RuntimeWarning, 
+    module='agentmake'
+)
 
 BIBLEMATE_USER_DIR = os.path.join(AGENTMAKE_USER_DIR, "biblemate")
 if not os.path.isdir(BIBLEMATE_USER_DIR):
@@ -237,6 +246,7 @@ for file_name in os.listdir(BIBLEMATE_ETEXTEDIT_PLUGINS):
 
 # constants
 AGENTMAKE_CONFIG = {
+    "stream": True,
     "print_on_terminal": False,
     "word_wrap": False,
 }

@@ -1215,7 +1215,6 @@ Press `Ctrl+C` once or twice until the running process is cancelled, while you a
                             else:
                                 tool_result = await client.call_tool(tool, {"request": tool_instruction}, timeout=config.mcp_timeout)
                         else:
-                            # TODO: check getDictionaryOutput
                             structured_output = getDictionaryOutput(messages=messages, schema=tool_schema, backend=config.backend)
                             tool_result = await client.call_tool(tool, structured_output, timeout=config.mcp_timeout)
                         tool_result = tool_result.content[0].text
@@ -1319,7 +1318,6 @@ Press `Ctrl+C` once or twice until the running process is cancelled, while you a
                     if len(prompt_properties) == 1 and "request" in prompt_properties: # AgentMake MCP Servers or alike
                         result = await client.get_prompt(specified_prompt[1:], {"request": user_request})
                     else:
-                        # TODO: check getDictionaryOutput
                         structured_output = getDictionaryOutput(messages=messages, schema=prompt_schema, backend=config.backend)
                         result = await client.get_prompt(specified_prompt[1:], structured_output)
                     #print(result, "\n\n")
