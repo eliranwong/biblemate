@@ -143,11 +143,14 @@ class BibleVectorDatabase:
 
     def search_vector(self, query_vector, top_k=3, book=0):
         q = "SELECT text, vector FROM vectors"
-        if book:
+        args = ()
+        if book and isinstance(book, int):
             q += " WHERE book = ?"
             args = (book,)
-        else:
-            args = ()
+        elif book and (isinstance(book, str) or isinstance(book, tuple)):
+            q += f" WHERE book IN {book}"
+        elif book and isinstance(book, list):
+            q += f" WHERE book IN {tuple(book)}"
         self.cursor.execute(q, args)
         rows = self.cursor.fetchall()
         if not rows:
