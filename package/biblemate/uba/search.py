@@ -1,5 +1,5 @@
 from biblemate import config
-from biblemate.uba.api import run_uba_api
+from biblemate.uba.api import run_bm_api
 from agentmake.utils.rag import get_embeddings, cosine_similarity_matrix
 from typing import Union
 import os, apsw, json
@@ -15,13 +15,25 @@ class UBASearches:
         if not os.path.isfile(db_file):
             return "Invalid database file."
 
+        def get_exlb_keyword(sql_table):
+            if sql_table == "exlbt":
+                return "topics:::"
+            elif sql_table == "exlbn":
+                return "names:::"
+            elif sql_table == "exlbp":
+                return "characters:::"
+            elif sql_table == "exlbl":
+                return "locations:::"
+            else:
+                return ""
+
         query = urllib.parse.unquote(query).replace("「」", "/")
 
         keywords = {
-            "dictionary.db": "DICTIONARY:::",
-            "encyclopedia.db": f"ENCYCLOPEDIA:::{sql_table}:::",
-            "exlb.db": f"EXLB:::{sql_table}:::",
-            "collection.db": f"{'_promise' if sql_table == 'PROMISES' else '_harmony'}:::{bible}:::",
+            "dictionary.db": "dictionaries:::",
+            "encyclopedia.db": f"encyclopedias:::{sql_table}:::",
+            "exlb.db": get_exlb_keyword(sql_table),
+            "collection.db": f"{'promises' if sql_table == 'PROMISES' else 'parallels'}:::{bible}:::",
         }
 
         with apsw.Connection(db_file) as connection:
@@ -30,7 +42,7 @@ class UBASearches:
             if "+" in query:
                 cmd_prefix = keywords.get(os.path.basename(db_file))
                 path, _ = query.split("+", 1)
-                return run_uba_api(f"{cmd_prefix}{path}")
+                return run_bm_api(f"{cmd_prefix}{path}")
             else:
                 cursor.execute(f"SELECT * FROM {sql_table} WHERE entry = ?;", (query,))
                 rows = cursor.fetchall()
@@ -53,7 +65,7 @@ class UBASearches:
             elif len(rows) == 1: # single exact match
                 cmd_prefix = keywords.get(os.path.basename(db_file))
                 path = rows[0][0]
-                content = run_uba_api(f"{cmd_prefix}{path}")
+                content = run_bm_api(f"{cmd_prefix}{path}")
                 if sql_table == "exlbl" and "Click HERE for a Live Google Map" in content:
                     cursor.execute(f"SELECT lat, lng FROM {sql_table}i WHERE path = ?;", (path,))
                     lat, lng = cursor.fetchone()

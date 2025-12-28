@@ -221,18 +221,18 @@ async def uba_compare(options, descriptions):
     if not select:
         return ""
     else:
-        select = "_".join(select)
+        select = ",".join(select)
     result = await get_reference()
-    return f"//uba/COMPARE:::{select}:::{result}" if result else ""
+    return f"//bm/verses:::{select}:::{result}" if result else ""
 
 async def uba_compare_chapter(options, descriptions):
     select = await get_multiple_bibles(options, descriptions)
     if not select:
         return ""
     else:
-        select = "_".join(select)
+        select = ",".join(select)
     result = await get_reference(verse_reference=False)
-    return f"//uba/COMPARECHAPTER:::{select}:::{result}" if result else ""
+    return f"//bm/comparechapter:::{select}:::{result}" if result else ""
 
 async def uba_commentary(options, descriptions):
     select = await DIALOGS.getValidOptions(

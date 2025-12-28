@@ -5,7 +5,7 @@ from agentmake import OllamaAI, OLLAMA_FOUND, OLLAMA_NOT_FOUND_MESSAGE, AGENTMAK
 from agentmake.utils.rag import get_embeddings, cosine_similarity_matrix
 from prompt_toolkit.shortcuts import ProgressBar
 from biblemate import config, BIBLEMATEDATA
-from biblemate.uba.api import run_uba_api
+from biblemate.uba.api import run_bm_api
 from agentmake.plugins.uba.lib.BibleBooks import BibleBooks
 from agentmake.backends.ollama import OllamaAI
 
@@ -40,7 +40,7 @@ def search_bible(request:str, book:int=0, module=config.default_bible, search_re
     # perform the searches
     abbr = BibleBooks.abbrev["eng"]
     # exact matches
-    exact_matches_content = run_uba_api(f"{abbr[str(book)][0]}:::{module}:::{search_string}" if book else f"SEARCH:::{module}:::{search_string}")
+    exact_matches_content = run_bm_api(f"literal:::{abbr[str(book)][0]},{module}:::{search_string}" if book else f"literal:::{module}:::{search_string}")
     
     # semantic matches
     bible_file = os.path.join(BIBLEMATEDATA, "bible.db")
@@ -50,7 +50,7 @@ def search_bible(request:str, book:int=0, module=config.default_bible, search_re
     elif os.path.isfile(bible_file):
         db = BibleVectorDatabase()
         semantic_matches = [f"{abbr[str(b)][0]} {c}:{v}" for b, c, v, _ in db.search_meaning(search_string, top_k=config.max_semantic_matches, book=book)]
-        semantic_matches_content = run_uba_api(f"BIBLE:::{module}:::"+";".join(semantic_matches)) if semantic_matches else ""
+        semantic_matches_content = run_bm_api(f"verses:::{module}:::"+";".join(semantic_matches)) if semantic_matches else ""
     else:
         print("Download the data file `bible.db` via the `.download` command to enable semantic search.")
         semantic_matches = []

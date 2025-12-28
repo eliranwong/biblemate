@@ -3,7 +3,7 @@ from biblemate.uba.dialogs import *
 from biblemate.ui.text_area import getTextArea
 from biblemate.ui.info import get_banner
 from biblemate import config, CONFIG_FILE_BACKUP, DIALOGS, BIBLEMATE_VERSION, AGENTMAKE_CONFIG, BIBLEMATE_USER_DIR, BIBLEMATEDATA, fix_string, write_user_config, list_dir_content
-from biblemate.uba.api import DEFAULT_MODULES, run_uba_api
+from biblemate.uba.api import DEFAULT_MODULES, run_bm_api
 from pathlib import Path
 import urllib.parse
 import asyncio, re, os, subprocess, click, gdown, pprint, argparse, json, zipfile, warnings, sys, traceback
@@ -313,7 +313,7 @@ async def main_async():
         console.print(get_banner(BIBLEMATE_VERSION))
 
         tools, tools_schema, master_available_tools, available_tools, tool_descriptions, tool_descriptions_lite, prompts, prompts_schema, resources, templates = await initialize_app(client)
-        resource_suggestions_raw = json.loads(run_uba_api(".resources"))
+        resource_suggestions_raw = json.loads(run_bm_api(".resources"))
         # check if default modules are valid:
         config_changed = False
         if not config.default_bible in resource_suggestions_raw["bibleListAbb"]:
@@ -628,7 +628,7 @@ async def main_async():
             elif user_request == ".lexicon":
                 user_request = await uba_lexicon(options=resource_suggestions_raw["lexiconList"])
             elif user_request == ".chronology":
-                user_request = "//uba/DATA:::Bible Chronology"
+                user_request = "//bm/chronology:::"
             if not user_request:
                 continue
 

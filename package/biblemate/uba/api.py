@@ -2,7 +2,7 @@ from agentmake import agentmake
 from agentmake.utils.online import get_local_ip
 from agentmake.plugins.uba.lib.BibleParser import BibleVerseParser
 from biblemate import config, AGENTMAKE_CONFIG
-import requests, os, re
+import requests, os, re, traceback
 
 DEFAULT_MODULES = {
     "bible": config.default_bible,
@@ -84,96 +84,27 @@ DEFAULT_MODULES = {
 }
 
 # api
-def run_uba_api(command: str, html=False) -> str:
-    UBA_API_LOCAL_PORT = int(os.getenv("UBA_API_LOCAL_PORT")) if os.getenv("UBA_API_LOCAL_PORT") else 8080
-    UBA_API_ENDPOINT = os.getenv("UBA_API_ENDPOINT") if os.getenv("UBA_API_ENDPOINT") else f"http://{get_local_ip()}:{UBA_API_LOCAL_PORT}/plain" # use dynamic local ip if endpoint is not specified
-    UBA_API_TIMEOUT = int(os.getenv("UBA_API_TIMEOUT")) if os.getenv("UBA_API_TIMEOUT") else 10
-    UBA_API_PRIVATE_KEY = os.getenv("UBA_API_PRIVATE_KEY") if os.getenv("UBA_API_PRIVATE_KEY") else ""
-
-    endpoint = UBA_API_ENDPOINT
-    if html:
-        endpoint = endpoint.replace("/plain", "/html")
-    private = f"private={UBA_API_PRIVATE_KEY}&" if UBA_API_PRIVATE_KEY else ""
-    url = f"""{endpoint}?{private}cmd={command}"""
+def run_bm_api(query: str, language: str="eng") -> str:
+    # 1. Define the URL
+    url = os.getenv("BM_API_ENDPOINT", "https://biblemate.gospelchurch.uk/api/data")
+    # 2. Define your parameters
+    payload = {
+        "query": query,
+        "language": language, # Optional
+        "token": os.getenv("BM_API_CUSTOM_KEY", "") # Optional
+    }
+    # 3. Send the GET request
     try:
-        response = requests.get(url, timeout=UBA_API_TIMEOUT)
-        response.encoding = "utf-8"
-        content = response.text.strip()
-        if command.lower().startswith("data:::"):
-            return content.replace("\n", "\n- ")
-        content = re.sub(r"\n([0-9]+?) \(([^\(\)]+?)\)", r"\n- `\1` (`\2`)", content)
-        content = re.sub(r"^([0-9]+?) \(([^\(\)]+?)\)", r"- `\1` (`\2`)", content)
-        content = re.sub(r"\n\(([^\(\)]+?)\)", r"\n- (`\1`)", content)
-        content = re.sub(r"^\(([^\(\)]+?)\)", r"- (`\1`)", content)
-        if command.lower().startswith("chapter:::"):
-            content = "# " + re.sub(r"\n`([0-9]+?)` ", r"\n* `\1` ", content).replace("\n# ", "\n## ")
-        return content
-    except Exception as err:
-        return f"An error occurred: {err}"
-
-def run_uba_ai_commentary(request: str):
-    refs = BibleVerseParser(False).extractExhaustiveReferencesReadable(request)
-    if not refs:
-        return "Please provide a valid Bible reference to complete your request."
-    output = []
-    for ref in refs.split("; "):
-        default_verse = run_uba_api(f"BIBLE:::{config.default_bible}:::{ref}")
-        interlinear_verse = run_uba_api(f"BIBLE:::OHGBi:::{ref}")
-        prompt = f"""# Write a detailed commentary on the following Bible verse:\n\n## {ref}\n{default_verse}\n\n##Interlinear (Hebrew/Greek with literal translation):\n{interlinear_verse}\n\nCommentary:"""
-        messages = agentmake(prompt, system="biblemate/commentary", **AGENTMAKE_CONFIG)
-        output.append(messages[-1].get("content") if messages and "content" in messages[-1] else "Error!")
-    return f"# Commentary - {ref}\n\n"+"\n\n".join(output)
-
-def run_uba_index(request: str):
-    messages = agentmake(request, **{'input_content_plugin': 'uba/every_single_ref', 'tool': 'uba/index'}, **AGENTMAKE_CONFIG)
-    return messages[-1].get("content") if messages and "content" in messages[-1] else "Error!"
-
-def run_uba_translation(request: str):
-    refs = BibleVerseParser(False).extractExhaustiveReferencesReadable(request)
-    if not refs:
-        return "Please provide a valid Bible reference to complete your request."
-    output = ""
-    for ref in refs.split("; "):
-        command = f"TRANSLATION:::{ref}"
-        content = run_uba_api(command)
-        if "\nBSB " in content:
-            it, lt = content.split("\nBSB ", 1)
-            heading, it = it.split("\nBHS\n", 1)
+        response = requests.get(url, params=payload, timeout=os.getenv("BM_API_TIMEOUT", 10))
+        # 4. Check if the request was successful (Status Code 200)
+        if response.status_code == 200:
+            data = response.json()  # Convert JSON response to Python dict
+            return data.get("content", "[NO_CONTENT]")
         else:
-            it, lt = content.split("\nLT ", 1)
-            heading, it = it.split("\nIT ", 1)
-        it = re.sub('''([0-9A-Za-z,.!?'":]+?)([^0-9A-Za-z,.!?'":])''', r"`\1`\2", it+"\n")
-        content = (heading+"\nBHS\n"+it+"BSB "+lt) if "\nBSB " in content else (heading+"\nIT "+it+"LT "+lt)
-        output += content.replace("\n", "\n- ")
-    return output
-
-def run_uba_discourse(request: str):
-    refs = BibleVerseParser(False).extractExhaustiveReferencesReadable(request)
-    if not refs:
-        return "Please provide a valid Bible reference to complete your request."
-    output = ""
-    for ref in refs.split("; "):
-        command = f"DISCOURSE:::{ref}"
-        content = run_uba_api(command)
-        output += content.replace("\n", "\n- ")
-    return output
-
-def run_uba_words(request: str):
-    refs = BibleVerseParser(False).extractExhaustiveReferencesReadable(request)
-    if not refs:
-        return "Please provide a valid Bible reference to complete your request."
-    output = ""
-    for ref in refs.split("; "):
-        command = f"WORDS:::{ref}"
-        morphology = run_uba_api(command, True)
-        morphology = re.sub('''<[^<>]*?(READWORD|READLEXEME)(:::.*?)'">''', r'\n- [\1\2]\n- ', morphology)
-        morphology = morphology.replace("audiotrack", "")
-        morphology = morphology.replace("<div ", "\n### <div ")
-        morphology = re.sub('''<[^<>]*? G(E[0-9]+?) (H[0-9]+?)"[^<>]*?>([^<>]*?)<[^<>]*?>''', r"\3 [\1] [\2]", morphology)
-        morphology = re.sub('''<[^<>]*? (G[0-9]+?)"[^<>]*?>([^<>]*?)<[^<>]*?>''', r"\2 [\1]", morphology)
-        morphology = morphology.replace("<heb>", "\n- <heb>")
-        morphology = morphology.replace("<grk>", "\n- <grk>")
-        morphology = morphology.replace("<br>", "\n- <br>")
-        morphology = re.sub('<[^<>]*?>', '', morphology)
-        output += "# "+morphology
-    return output
+            print(f"Error: {response.status_code}")
+            return response.text
+    except requests.exceptions.ConnectionError:
+        print("Could not connect to BibleMate AI API server.")
+    except Exception as err:
+        traceback.print_exc()
+        return f"An error occurred: {err}"
