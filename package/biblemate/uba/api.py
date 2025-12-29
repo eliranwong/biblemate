@@ -95,7 +95,7 @@ def run_bm_api(query: str, language: str="eng") -> str:
     }
     # 3. Send the GET request
     try:
-        response = requests.get(url, params=payload, timeout=os.getenv("BM_API_TIMEOUT", 10))
+        response = requests.get(url, params=payload, timeout=int(os.getenv("BM_API_TIMEOUT", 10)))
         # 4. Check if the request was successful (Status Code 200)
         if response.status_code == 200:
             data = response.json()  # Convert JSON response to Python dict
