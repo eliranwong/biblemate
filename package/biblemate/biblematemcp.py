@@ -5,11 +5,14 @@ import argparse
 
 parser = argparse.ArgumentParser(description = f"""BibleMate AI MCP Server {BIBLEMATE_VERSION} CLI options""")
 parser.add_argument("-b", "--backend", action="store", dest="backend", help="AI backend; overrides the default backend temporarily.")
+parser.add_argument("-lm", "--model", action="store", dest="model", help="AI model; overrides the default model temporarily.")
 parser.add_argument("-p", "--port", action="store", dest="port", help=f"specify a port for the MCP server to use, e.g. {config.mcp_port}; applicable to command `biblematemcp` only")
 args = parser.parse_args()
 
 if args.backend:
     config.backend = args.backend
+if args.model:
+    config.model = args.model
 
 def mcp():
     builtin_mcp_server = os.path.join(os.path.dirname(os.path.realpath(__file__)), "bible_study_mcp.py")

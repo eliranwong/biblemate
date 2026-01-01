@@ -37,6 +37,7 @@ parser = argparse.ArgumentParser(description = f"""BibleMate AI {BIBLEMATE_VERSI
 # global options
 parser.add_argument("default", nargs="*", default=None, help="initial prompt")
 parser.add_argument("-b", "--backend", action="store", dest="backend", help="AI backend; overrides the default backend temporarily.")
+parser.add_argument("-lm", "--model", action="store", dest="model", help="AI model; overrides the default model temporarily.")
 parser.add_argument("-l", "--light", action="store", dest="light", choices=["true", "false"], help="Enable / disable light context. Must be one of: true, false.")
 parser.add_argument("-m", "--mode", action="store", dest="mode", choices=["agent", "partner", "chat"], help="Specify AI mode. Must be one of: agent, partner, chat.")
 parser.add_argument("-pe", "--promptengineer", action="store", dest="promptengineer", choices=["true", "false"], help="Enable / disable prompt engineering. Must be one of: true, false.")
@@ -56,8 +57,10 @@ if not sys.stdin.isatty():
 
 # write to the `config.py` file temporarily for the MCP server to pick it up
 config.backend = args.backend if args.backend else os.getenv("DEFAULT_AI_BACKEND") if os.getenv("DEFAULT_AI_BACKEND") else "googleai"
+config.model = args.model if args.model else os.getenv("DEFAULT_AI_MODEL") if os.getenv("DEFAULT_AI_MODEL") else "gemini-2.5-flash"
 with open(CONFIG_FILE_BACKUP, "a", encoding="utf-8") as fileObj:
     fileObj.write(f'''\nconfig.backend="{config.backend}"''')
+    fileObj.write(f'''\nconfig.model="{config.model}"''')
 
 AGENTMAKE_ENV_PATH = os.path.join(AGENTMAKE_USER_DIR, "agentmake.env")
 if config.backend == "googleai" and not os.getenv("GOOGLEAI_API_KEY"):
@@ -76,6 +79,7 @@ Enter `biblemate` again to start using BibleMate AI with Google AI backend.
         exit()
 
 AGENTMAKE_CONFIG["backend"] = config.backend
+AGENTMAKE_CONFIG["model"] = config.model
 DEFAULT_SYSTEM = "You are BibleMate AI, an autonomous agent designed to assist users with their Bible study."
 DEFAULT_MESSAGES = [{"role": "system", "content": DEFAULT_SYSTEM}, {"role": "user", "content": "Hello!"}, {"role": "assistant", "content": "Hello! I'm BibleMate AI, your personal assistant for Bible study. How can I help you today?"}] # set a tone for bible study; it is userful when auto system is used.
 FINAL_INSTRUCTION = """# Instruction
@@ -344,7 +348,7 @@ async def main_async():
         resource_suggestions += [abbr[str(book)][0] for book in range(1,67)]
         resource_suggestions += ["."+abbr[str(book)][0]+" " for book in range(1,67)]
 
-        write_user_config() # remove the temporary `config.backend`
+        write_user_config() # remove the temporary `config.backend` and `config.model`
         
         available_tools_pattern = "|".join(available_tools)
         prompt_list = [f"/{p}" for p in prompts.keys()]
@@ -444,7 +448,7 @@ async def main_async():
                     # check connection
                     if not config.skip_connection_check:
                         try:
-                            agentmake("Hello!", backend=config.backend, system=DEFAULT_SYSTEM)
+                            agentmake("Hello!", backend=config.backend, model=config.model, system=DEFAULT_SYSTEM)
                         except Exception as e:
                             print("Connection failed! Please ensure that you have a stable internet connection and that my AI backend and model are properly configured.")
                             print("Viist https://github.com/eliranwong/agentmake#supported-backends for help about the backend configuration.\n")
@@ -1215,7 +1219,7 @@ Press `Ctrl+C` once or twice until the running process is cancelled, while you a
                             else:
                                 tool_result = await client.call_tool(tool, {"request": tool_instruction}, timeout=config.mcp_timeout)
                         else:
-                            structured_output = getDictionaryOutput(messages=messages, schema=tool_schema, backend=config.backend)
+                            structured_output = getDictionaryOutput(messages=messages, schema=tool_schema, backend=config.backend, model=config.model)
                             tool_result = await client.call_tool(tool, structured_output, timeout=config.mcp_timeout)
                         tool_result = tool_result.content[0].text
                         messages[-1]["content"] += f"\n\n[Using tool `{tool}`]"
@@ -1318,7 +1322,7 @@ Press `Ctrl+C` once or twice until the running process is cancelled, while you a
                     if len(prompt_properties) == 1 and "request" in prompt_properties: # AgentMake MCP Servers or alike
                         result = await client.get_prompt(specified_prompt[1:], {"request": user_request})
                     else:
-                        structured_output = getDictionaryOutput(messages=messages, schema=prompt_schema, backend=config.backend)
+                        structured_output = getDictionaryOutput(messages=messages, schema=prompt_schema, backend=config.backend, model=config.model)
                         result = await client.get_prompt(specified_prompt[1:], structured_output)
                     #print(result, "\n\n")
                     master_plan = result.messages[0].content.text

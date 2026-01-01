@@ -12,9 +12,11 @@ from biblemate.api.search import UBASearches
 from typing import List, Dict, Any, Union
 
 THIS_BACKEND = config.backend if hasattr(config, "backend") else os.getenv("DEFAULT_AI_BACKEND") if os.getenv("DEFAULT_AI_BACKEND") else "googleai"
+THIS_MODEL = config.model if hasattr(config, "model") else os.getenv("DEFAULT_AI_MODEL") if os.getenv("DEFAULT_AI_MODEL") else "gemini-2.5-flash"
 
 # configure backend
 AGENTMAKE_CONFIG["backend"] = THIS_BACKEND
+AGENTMAKE_CONFIG["model"] = THIS_MODEL
 
 # Configure logging before creating the FastMCP server
 logging.basicConfig(format="[%(levelname)s]: %(message)s", level=logging.ERROR)

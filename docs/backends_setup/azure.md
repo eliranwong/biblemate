@@ -38,13 +38,13 @@ AZURE_OPENAI_API_ENDPOINT=
 AZURE_OPENAI_MODEL=gpt-5-chat
 ```
 
-3. Optionally, you can set the default backend to `azure`:
+3. Optionally, you can set the default backend to `azure_openai`:
 
-> DEFAULT_AI_BACKEND=azure
+> DEFAULT_AI_BACKEND=azure_openai
 
-4. Use backend `azure` without setting it as default:
+4. Use backend `azure_openai` without setting it as default:
 
-> biblemate -b azure
+> biblemate -b azure_openai
 
 # Links
 

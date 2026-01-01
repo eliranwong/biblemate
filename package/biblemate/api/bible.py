@@ -31,7 +31,7 @@ def search_bible(request:str, book:int=0, module=config.default_bible, search_re
                     "required": ["search_string"],
                 },
             }
-            search_string = getDictionaryOutput(request, schema=schema, backend=config.backend)["search_string"]
+            search_string = getDictionaryOutput(request, schema=schema, backend=config.backend, model=config.model)["search_string"]
         except:
             search_string = agentmake(request, system="biblemate/identify_search_string")[-1].get("content", "").strip()
             search_string = re.sub(r"^.*?```(.+?)```.*?$", r"\1", search_string.replace("```search_string", ""), flags=re.DOTALL).replace("```", "").strip()
