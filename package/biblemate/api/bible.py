@@ -5,7 +5,7 @@ from agentmake import OllamaAI, OLLAMA_FOUND, OLLAMA_NOT_FOUND_MESSAGE, AGENTMAK
 from agentmake.utils.rag import get_embeddings, cosine_similarity_matrix
 from prompt_toolkit.shortcuts import ProgressBar
 from biblemate import config, BIBLEMATEDATA
-from biblemate.uba.api import run_bm_api
+from biblemate.api.api import run_bm_api
 from agentmake.plugins.uba.lib.BibleBooks import BibleBooks
 from agentmake.backends.ollama import OllamaAI
 
@@ -77,7 +77,7 @@ class BibleVectorDatabase:
     Requirement: Install `Ollama` separately
 
     ```usage
-    from biblemate.uba.bible import BibleVectorDatabase
+    from biblemate.api.bible import BibleVectorDatabase
     db = BibleVectorDatabase('my_bible.bible') # edit 'my_bible.bible' to your bible file path
     db.add_vectors() # add vectors to the database
     results = db.search_meaning("Jesus love", 10)

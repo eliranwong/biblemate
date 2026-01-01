@@ -1,9 +1,9 @@
 from biblemate.core.systems import *
-from biblemate.uba.dialogs import *
+from biblemate.api.dialogs import *
 from biblemate.ui.text_area import getTextArea
 from biblemate.ui.info import get_banner
 from biblemate import config, CONFIG_FILE_BACKUP, DIALOGS, BIBLEMATE_VERSION, AGENTMAKE_CONFIG, BIBLEMATE_USER_DIR, BIBLEMATEDATA, fix_string, write_user_config, list_dir_content
-from biblemate.uba.api import DEFAULT_MODULES, run_bm_api
+from biblemate.api.api import DEFAULT_MODULES, run_bm_api
 from pathlib import Path
 import urllib.parse
 import asyncio, re, os, subprocess, click, gdown, pprint, argparse, json, zipfile, warnings, sys, traceback

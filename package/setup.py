@@ -2,7 +2,7 @@ from setuptools import setup
 from setuptools.command.install import install
 import os, shutil, platform, sys
 
-version = "0.2.46"
+version = "0.2.49"
 with open(os.path.join("biblemate", "version.txt"), "w", encoding="utf-8") as fileObj:
     fileObj.write(version)
 
@@ -44,7 +44,7 @@ setup(
         package,
         f"{package}.core",
         f"{package}.ui",
-        f"{package}.uba",
+        f"{package}.api",
         f"{package}.etextedit",
         f"{package}.etextedit.plugins",
         #f"{package}.data",
@@ -54,7 +54,7 @@ setup(
         package: ["*.*"],
         f"{package}.core": ["*.*"],
         f"{package}.ui": ["*.*"],
-        f"{package}.uba": ["*.*"],
+        f"{package}.api": ["*.*"],
         f"{package}.etextedit": ["*.*"],
         f"{package}.etextedit.plugins": ["*.*"],
         #f"{package}.data": ["*.*"],

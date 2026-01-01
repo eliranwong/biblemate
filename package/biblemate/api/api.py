@@ -2,6 +2,7 @@ from agentmake import agentmake
 from agentmake.utils.online import get_local_ip
 from agentmake.plugins.uba.lib.BibleParser import BibleVerseParser
 from biblemate import config, AGENTMAKE_CONFIG
+from urllib.parse import quote
 import requests, os, re, traceback
 
 DEFAULT_MODULES = {
@@ -89,7 +90,7 @@ def run_bm_api(query: str, language: str="eng") -> str:
     url = os.getenv("BM_API_ENDPOINT", "https://biblemate.gospelchurch.uk/api/data")
     # 2. Define your parameters
     payload = {
-        "query": query,
+        "query": quote(query),
         "language": language, # Optional
         "token": os.getenv("BM_API_CUSTOM_KEY", "") # Optional
     }
@@ -99,7 +100,10 @@ def run_bm_api(query: str, language: str="eng") -> str:
         # 4. Check if the request was successful (Status Code 200)
         if response.status_code == 200:
             data = response.json()  # Convert JSON response to Python dict
-            return data.get("content", "[NO_CONTENT]")
+            api_content = data.get("content", "[NO_CONTENT]")
+            if api_content == "\n\n":
+                api_content = "[NO_CONTENT]"
+            return api_content
         else:
             print(f"Error: {response.status_code}")
             return response.text

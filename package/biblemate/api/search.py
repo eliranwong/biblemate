@@ -1,5 +1,5 @@
 from biblemate import config
-from biblemate.uba.api import run_bm_api
+from biblemate.api.api import run_bm_api
 from agentmake.utils.rag import get_embeddings, cosine_similarity_matrix
 from typing import Union
 import os, apsw, json

@@ -6,9 +6,9 @@ from fastmcp.prompts.prompt import PromptMessage, TextContent
 from agentmake import agentmake, DEVELOPER_MODE
 from agentmake.plugins.uba.lib.BibleParser import BibleVerseParser
 from biblemate import BIBLEMATE_VERSION, BIBLEMATEDATA, AGENTMAKE_CONFIG, config
-from biblemate.uba.bible import search_bible
-from biblemate.uba.api import run_bm_api
-from biblemate.uba.search import UBASearches
+from biblemate.api.bible import search_bible
+from biblemate.api.api import run_bm_api
+from biblemate.api.search import UBASearches
 from typing import List, Dict, Any, Union
 
 THIS_BACKEND = config.backend if hasattr(config, "backend") else os.getenv("DEFAULT_AI_BACKEND") if os.getenv("DEFAULT_AI_BACKEND") else "googleai"

@@ -1,6 +1,6 @@
 def insert_bible_text(event=None):
     from agentmake.plugins.uba.lib.BibleParser import BibleVerseParser
-    from biblemate.uba.api import run_bm_api
+    from biblemate.api.api import run_bm_api
     from biblemate import config
 
     buffer = event.app.current_buffer if event is not None else text_field.buffer
