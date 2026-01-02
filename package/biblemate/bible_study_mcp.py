@@ -43,6 +43,9 @@ mcp = FastMCP(name="BibleMate AI", auth=verifier)
 def getResponse(messages:list) -> str:
     return messages[-1].get("content") if messages and "content" in messages[-1] else "Error!"
 
+def chapter2verses(request:str) -> str:
+    return re.sub("[Cc][Hh][Aa][Pp][Tt][Ee][Rr] ([0-9]+?)([^0-9])", r"\1:1-180\2", request)
+
 # Note: Declare global variables used in MCP resources, tools or prompts, so that they work when MCP is run in http transport mode
 
 @mcp.resource("resource://info")
@@ -1075,49 +1078,57 @@ def search_revelation_only(request:str) -> str:
 @mcp.tool
 def compare_bible_translations(request:str) -> str:
     """compare Bible translations; bible verse reference(s) must be given"""
-    global run_bm_api
+    global run_bm_api, chapter2verses
+    request = chapter2verses(request)
     return run_bm_api(f"verses:::KJV,LEB,NET,OHGB,OHGBi:::{request}")
 
 @mcp.tool
 def retrieve_bible_cross_references(request:str) -> str:
     """retrieve cross-references of Bible verses; bible verse reference(s) must be given"""
-    global run_bm_api
+    global run_bm_api, chapter2verses
+    request = chapter2verses(request)
     return run_bm_api(f"xrefs:::{request}")
 
 @mcp.tool
 def retrieve_hebrew_or_greek_bible_verses(request:str) -> str:
     """retrieve Hebrew or Greek Bible verses; bible verse reference(s) must be given, e.g. John 3:16-17; single or multiple references accepted, e.g. Deut 6:4; Gen 1:26-27"""
-    global run_bm_api
+    global run_bm_api, chapter2verses
+    request = chapter2verses(request)
     return run_bm_api(f"verses:::OHGB:::{request}")
 
 @mcp.tool
 def retrieve_interlinear_hebrew_or_greek_bible_verses(request:str) -> str:
     """retrieve interlinear Hebrew-English or Greek-English Bible verses; bible verse reference(s) must be given, e.g. John 3:16-17; single or multiple references accepted, e.g. Deut 6:4; Gen 1:26-27"""
-    global run_bm_api
+    global run_bm_api, chapter2verses
+    request = chapter2verses(request)
     return run_bm_api(f"verses:::OHGBi:::{request}")
 
 @mcp.tool
 def retrieve_bible_verses(request:str) -> str:
     """retrieve Bible verses; bible verse reference(s) must be given, e.g. John 3:16-17; single or multiple references accepted, e.g. Deut 6:4; Gen 1:26-27"""
-    global run_bm_api
+    global run_bm_api, chapter2verses
+    request = chapter2verses(request)
     return run_bm_api(f"verses:::{config.default_bible}:::{request}")
 
 @mcp.tool
 def retrieve_verse_morphology(request:str) -> str:
     """retrieve parsing and morphology of individual bible verses; bible verse reference(s) must be given, e.g. John 3:16-17; single or multiple references accepted, e.g. Deut 6:4; Gen 1:26-27"""
-    global run_bm_api
+    global run_bm_api, chapter2verses
+    request = chapter2verses(request)
     return run_bm_api(f"morphology:::{request}")
 
 @mcp.tool
 def retrieve_bible_chapter(request:str) -> str:
     """retrieve a whole Bible chapter; bible chapter reference must be given, e.g. John 3"""
-    global run_bm_api
+    global run_bm_api, chapter2verses
+    request = chapter2verses(request)
     return run_bm_api(f"chapter:::{request}")
 
 @mcp.tool
 def read_bible_commentary(request:str) -> str:
     """read bible commentary on individual bible verses; bible verse reference(s) must be given, like , like John 3:16 or John 3:16-18"""
-    global run_bm_api
+    global run_bm_api, chapter2verses
+    request = chapter2verses(request)
     return run_bm_api(f"commentary:::{request}")
 
 @mcp.tool
@@ -1398,7 +1409,7 @@ def simple_bible_study(request:str) -> PromptMessage:
     """Perform a simple bible study task"""
     global PromptMessage, TextContent
     prompt_text = f"""You are a bible study agent. You check the user request, under the `User Request` section, and resolve it with the following steps in order:
-1. Call tool 'retrieve_english_bible_verses' for Bible text, 
+1. Call tool 'retrieve_english_bible_verses' or `retrieve_bible_chapter` for Bible text, 
 2. Call tool 'retrieve_bible_cross_references' for Bible cross-references, 
 3. Call tool 'study_old_testament_themes' for studying old testament themes or 'study_new_testament_themes' for studying new testament themes, and 
 4. Call tool 'write_bible_theology' to explain its theology.
