@@ -1,1 +1,0 @@
-etextedit plugins are placed here
