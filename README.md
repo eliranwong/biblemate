@@ -41,8 +41,9 @@ Additional Features implemented in BibleMate AI include, but are not limited to:
 * New Added Loop Feature for Bible Audio
 * Improved Visual Presentation of Bible Relationships, Maps, Timelines, and Chronology
 * Improved Tab and History Management
+* Data Downloads in One Go
 
-## Source Codes
+## Repositories
 
 BibleMate AI is a comprehensive bible suite that offers:
 
@@ -52,6 +53,42 @@ BibleMate AI is a comprehensive bible suite that offers:
 - Http Server: https://github.com/eliranwong/biblemateweb
 - API Server: https://github.com/eliranwong/biblemateweb
 - Bible Data: https://github.com/eliranwong/biblematedata
+
+## Main Packages
+
+CLI Version / Agent Mode / MCP Server:
+
+> pip install --upgrade biblemate
+
+Bible Data Setup:
+
+> pip install --upgrade biblematedata
+
+Web UI / HTTP Server / API Server
+
+> pip install --upgrade biblemateweb
+
+## Main Usage
+
+CLI Version / Agent Mode / Partner Mode
+
+> biblemate
+
+MCP Server:
+
+> biblematemcp
+
+Data Setup:
+
+> biblematedata
+
+HTTP Server / API Server
+
+> biblemateweb
+
+Web UI
+
+> open http://localhost:33355
 
 ## 🙏 Acknowledgments
 
