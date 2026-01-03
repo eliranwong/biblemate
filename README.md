@@ -12,7 +12,7 @@ Web GUI / Http Server: https://biblemate.gospelchurch.uk
 
 API Server: https://biblemate.gospelchurch.uk/api/data
 
-## Full Upgrade of the UniqueBible App
+## Full Upgrade From UniqueBible App to BibleMate AI
 
 BibleMate AI is partially built on the [UniqueBible App](https://github.com/eliranwong/UniqueBible) data and features.
 
