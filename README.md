@@ -27,7 +27,7 @@ Additional Features implemented in BibleMate AI include, but are not limited to:
 * CLI Version Re-written
 * Web GUI / Http Server Re-written
 * AI-generated Book Analysis on Every Single Bible Book in Three Languages
-* AI-generated Capter Summary on Every Single Bible Chapter in Three Languages
+* AI-generated Chapter Summary on Every Single Bible Chapter in Three Languages
 * AI-generated Commentary on Every Single Bible Verse in Three Languages
 * New Set of 12 Search Tools for In-depth Bible Studies
 * Support Semantic Searches with Vectors Database
@@ -64,7 +64,7 @@ Bible Data Setup:
 
 > pip install --upgrade biblematedata
 
-Web UI / HTTP Server / API Server
+Web UI / HTTP Server / API Server / Agent Mode (Web) / Partner Mode (Web)
 
 > pip install --upgrade biblemateweb
 
@@ -74,25 +74,31 @@ CLI Version / Agent Mode / Partner Mode
 
 > biblemate
 
-Check for latest development at: https://github.com/eliranwong/biblematecli
+Check for the latest development at: https://github.com/eliranwong/biblematecli
 
 MCP Server:
 
 > biblematemcp
 
-Check for latest development at: https://github.com/eliranwong/biblematecli
+Check for the latest development at: https://github.com/eliranwong/biblematecli
 
 Data Setup:
 
 > biblematedata
 
-Check for latest development at: https://github.com/eliranwong/biblematedata
+Check for the latest development at: https://github.com/eliranwong/biblematedata
 
-HTTP Server / API Server
+HTTP Server / API Server / Agent Mode (Web) / Partner Mode (Web)
 
 > biblemateweb
 
-Check for latest development at: https://github.com/eliranwong/biblemateweb
+Check for the latest development at: https://github.com/eliranwong/biblemateweb
+
+API Client:
+
+> biblemateapi -h
+
+Check for the latest development at: https://github.com/eliranwong/biblemateweb
 
 Web UI
 
