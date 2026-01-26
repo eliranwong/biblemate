@@ -2,198 +2,230 @@
 
 **BibleMate AI** is a groundbreaking, autonomous AI agent designed to revolutionize your Bible study. It can create study plans, coordinate multiple Bible tools, and take multi-step actions to complete complex Bible-related tasks, such as conducting an in-depth study of a particular Bible passage.
 
-Website: https://biblemate.ai
+**🌐 Website:** https://biblemate.ai
+**📺 Public Demo:** https://biblemate.gospelchurch.uk
+**🔌 MCP Server:** https://bible.gospelchurch.uk/mcp
+**📡 API Server:** https://biblemate.gospelchurch.uk/api/data
 
-CLI Version: https://github.com/eliranwong/biblematecli
+## Table of Contents
 
-MCP Server: https://bible.gospelchurch.uk/mcp
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+- [Key Features](#key-features)
+- [Components & Repositories](#components--repositories)
+- [Related Projects](#related-projects)
+- [Data Repositories](#data-repositories)
 
-Web GUI / Http Server: https://biblemate.gospelchurch.uk
+## Overview
 
-API Server: https://biblemate.gospelchurch.uk/api/data
+BibleMate AI is a comprehensive Bible study suite that represents a major upgrade from the [UniqueBible App](https://github.com/eliranwong/UniqueBible). It offers multiple interfaces and deployment options to suit different use cases:
 
-## Full Upgrade From UniqueBible App to BibleMate AI
+- **CLI** - Command-line interface for terminal users
+- **Web GUI** - Modern web interface accessible from any browser
+- **MCP Server** - Model Context Protocol integration for AI assistants
+- **HTTP/API Server** - RESTful API for custom integrations
 
-BibleMate AI is partially built on the [UniqueBible App](https://github.com/eliranwong/UniqueBible) data and features.
+## Getting Started
 
-There are lots of new features implemented in BibleMate AI that haven't been included in the UniqueBible App.
+### Installation
 
-Additional Features implemented in BibleMate AI include, but are not limited to:
+Choose the package(s) that match your needs:
 
-* AI Agent Mode for Bible Studies 
-* AI Partner Mode for Bible Studies
-* Newly Added MCP Server
-* API Server Re-written
-* CLI Version Re-written
-* Web GUI / Http Server Re-written
-* AI-generated Book Analysis on Every Single Bible Book in Three Languages
-* AI-generated Chapter Summary on Every Single Bible Chapter in Three Languages
-* AI-generated Commentary on Every Single Bible Verse in Three Languages
-* New Set of 12 Search Tools for In-depth Bible Studies
-* Support Semantic Searches with Vectors Database
-* Support Selective Morphology Search with Web UI
-* Sync Parallel Bible Scrolling
-* Sync Bible Notes with Google Accounts
-* User Customisation for Web UI
-* Quick Access of Hebrew / Greek Audio for Every Single Hebrew / Greek Word via Tooltips
-* Bible Podcast Audio for Every Single Bible Book
-* Bible Podcast Audio for Every Single Bible Chapter
-* New Added Loop Feature for Bible Audio
-* Improved Visual Presentation of Bible Relationships, Maps, Timelines, and Chronology
-* Improved Tab and History Management
-* Data Downloads in One Go
+```bash
+# CLI Version, Agent Mode, Partner Mode, and MCP Server
+pip install --upgrade biblemate
 
-## Main Features & Repositories
+# Bible Data Setup
+pip install --upgrade biblematedata
 
-BibleMate AI is a comprehensive bible suite that offers:
+# Web GUI, HTTP Server, API Server
+pip install --upgrade biblemateweb
+```
 
-- CLI Version: https://github.com/eliranwong/biblematecli
-- MCP Server: https://github.com/eliranwong/biblematecli
-- Web GUI: https://github.com/eliranwong/biblemateweb
-- Http Server: https://github.com/eliranwong/biblemateweb
-- API Server: https://github.com/eliranwong/biblemateweb
-- Bible Data: https://github.com/eliranwong/biblematedata
+### Usage
 
-## Main Packages
+```bash
+# Launch CLI / Agent Mode / Partner Mode
+biblemate
 
-CLI Version / Agent Mode / Partner Mode / MCP Server:
+# Launch MCP Server
+biblematemcp
 
-> pip install --upgrade biblemate
+# Setup Bible Data
+biblematedata
 
-Bible Data Setup:
+# Launch Web GUI / HTTP Server
+biblemateweb
 
-> pip install --upgrade biblematedata
+# API Client
+biblemateapi -h
+```
 
-Web UI / HTTP Server / API Server / Agent Mode (Web) / Partner Mode (Web)
+**Access Web Interface:**
+- Local: http://localhost:33355
+- Public Demo: https://biblemate.gospelchurch.uk
 
-> pip install --upgrade biblemateweb
+## Key Features
 
-## Main Usage
+BibleMate AI builds upon the UniqueBible App foundation with extensive new capabilities:
 
-CLI Version / Agent Mode / Partner Mode
+### AI-Powered Study Tools
+- **AI Agent Mode** - Autonomous multi-step Bible study assistance
+- **AI Partner Mode** - Interactive Bible study companion
+- **AI-Generated Content** - Book analysis, chapter summaries, and verse commentary in 3 languages
 
-> biblemate
+### Search & Discovery
+- **12 Advanced Search Tools** - Comprehensive search capabilities
+- **Semantic Search** - Vector database-powered contextual search
+- **Morphology Search** - Selective morphological analysis with web UI
 
-Check for the latest development at: https://github.com/eliranwong/biblematecli
+### Original Languages
+- **Hebrew & Greek Audio** - Quick access via tooltips for every word
+- **Parallel Bible Scrolling** - Synchronized viewing across translations
+- **Original Text Resources** - Extensive Hebrew and Greek databases
 
-MCP Server:
+### Audio & Media
+- **Bible Podcasts** - Audio for every book and chapter
+- **Verse-by-Verse Audio** - Multiple translations and accents
+- **Audio Loop Feature** - Enhanced listening experience
 
-> biblematemcp
+### Modern Infrastructure
+- **MCP Server** - Model Context Protocol integration
+- **Rewritten API** - Modern RESTful API server
+- **Rewritten Web GUI** - Enhanced user interface
+- **Cloud Sync** - Bible notes synchronization with Google accounts
+- **User Customization** - Personalized web UI settings
 
-Check for the latest development at: https://github.com/eliranwong/biblematecli
+### Enhanced Visualization
+- Bible relationships, maps, timelines, and chronology
+- Improved tab and history management
+- One-click data downloads
 
-Data Setup:
+## Components & Repositories
 
-> biblematedata
+BibleMate AI consists of three main components, each maintained in separate repositories:
 
-Check for the latest development at: https://github.com/eliranwong/biblematedata
+### 1. CLI & MCP Server
+**Repository:** https://github.com/eliranwong/biblematecli
+**Package:** `biblemate`
+**Includes:** Command-line interface, Agent Mode, Partner Mode, MCP Server
 
-HTTP Server / API Server / Agent Mode (Web) / Partner Mode (Web)
+```bash
+pip install --upgrade biblemate
+biblemate           # Launch CLI
+biblematemcp        # Launch MCP Server
+```
 
-> biblemateweb
+### 2. Web GUI & API Server
+**Repository:** https://github.com/eliranwong/biblemateweb
+**Package:** `biblemateweb`
+**Includes:** Web interface, HTTP server, API server, API client
 
-Check for the latest development at: https://github.com/eliranwong/biblemateweb
+```bash
+pip install --upgrade biblemateweb
+biblemateweb        # Launch web server
+biblemateapi -h     # API client help
+```
 
-API Client:
+### 3. Bible Data
+**Repository:** https://github.com/eliranwong/biblematedata
+**Package:** `biblematedata`
+**Includes:** Data setup and management tools
 
-> biblemateapi -h
-
-Check for the latest development at: https://github.com/eliranwong/biblemateweb
-
-Web UI
-
-> open http://localhost:33355
-
-Public Demo:
-
-> open https://biblemate.gospelchurch.uk
+```bash
+pip install --upgrade biblematedata
+biblematedata       # Setup Bible data
+```
 
 
 ## Related Projects
 
-BibleMate AI is built upon the foundations of the following projects:
+BibleMate AI builds upon and integrates with several projects:
 
-* [UniqueBible App](https.github.com/eliranwong/UniqueBible)
-* [UniqueBible API](https://github.com/eliranwong/UniqueBibleAPI)
-* [Marvel Bible Resources](https://github.com/eliranwong/Marvel.bible)
-* [ComputeMate AI](https.github.com/eliranwong/computemate)
-* [AgentMake AI](https.github.com/eliranwong/agentmake)
-* [AgentMake AI MCP](https.github.com/eliranwong/agentmakemcp)
-* [TeamGen AI](https://github.com/eliranwong/teamgenai)
-* [SearchBible AI](https://github.com/eliranwong/searchbibleai)
-* [Bible Verse Parser](https://github.com/eliranwong/bible-verse-parser)
-* [eTextEdit](https://github.com/eliranwong/etextedit)
+### Foundation Projects
+- [UniqueBible App](https://github.com/eliranwong/UniqueBible) - Original Bible study application
+- [UniqueBible API](https://github.com/eliranwong/UniqueBibleAPI) - API foundation
+- [Marvel Bible Resources](https://github.com/eliranwong/Marvel.bible) - Comprehensive Bible resources
 
-CLI versions are also available in Traditional and Simplified Chinese:
+### AI Framework Integration
+- [ComputeMate AI](https://github.com/eliranwong/computemate) - AI computation framework
+- [AgentMake AI](https://github.com/eliranwong/agentmake) - AI agent framework
+- [AgentMake AI MCP](https://github.com/eliranwong/agentmakemcp) - MCP integration
+- [TeamGen AI](https://github.com/eliranwong/teamgenai) - Multi-agent collaboration
 
-* [CLI in Traditional Chinese](https://github.com/eliranwong/biblematetc)
-* [CLI in Simplified Chinese](https://github.com/eliranwong/biblematesc)
+### Bible-Specific Tools
+- [SearchBible AI](https://github.com/eliranwong/searchbibleai) - AI-powered Bible search
+- [Bible Verse Parser](https://github.com/eliranwong/bible-verse-parser) - Verse reference parsing
+- [eTextEdit](https://github.com/eliranwong/etextedit) - Text editing utilities
 
-Remarks: The English version work with BibleMate web Server.  The Chinese versions currently work with UniqueBible App web server.
+### Internationalization
+CLI versions are also available in Chinese:
 
-## Bible Data Repositories (Selective)
+- [Traditional Chinese CLI](https://github.com/eliranwong/biblematetc)
+- [Simplified Chinese CLI](https://github.com/eliranwong/biblematesc)
 
-### Hebrew & Greek Data
+*Note: The English version works with BibleMate web server. Chinese versions currently work with UniqueBible App web server.*
 
-* [Open Hebrew Bible](https://github.com/eliranwong/OpenHebrewBible)
-* [Open GNT](https://github.com/eliranwong/OpenGNT)
-* [LXX Rahlfs 1935](https://github.com/eliranwong/LXX-Rahlfs-1935)
-* [LXX Swete 1930](https://github.com/eliranwong/LXX-Swete-1930)
-* [SBLGNT Add-ons](https://github.com/eliranwong/SBLGNT-add-ons)
+## Data Repositories
 
-## AI-Generated Data
+BibleMate AI provides access to extensive Bible data resources across multiple repositories:
 
-* [Bible Book Analysis](https://github.com/eliranwong/BibleBookStudies)
-* [Bible Chapter Summaries](https://github.com/eliranwong/BibleChapterSummaries)
-* [Bible Verse Commentary](https://github.com/eliranwong/AI_Commentary)
+### Hebrew & Greek Texts
+- [Open Hebrew Bible](https://github.com/eliranwong/OpenHebrewBible) - Tagged Hebrew Bible
+- [Open GNT](https://github.com/eliranwong/OpenGNT) - Open Greek New Testament
+- [LXX Rahlfs 1935](https://github.com/eliranwong/LXX-Rahlfs-1935) - Septuagint (Rahlfs edition)
+- [LXX Swete 1930](https://github.com/eliranwong/LXX-Swete-1930) - Septuagint (Swete edition)
+- [SBLGNT Add-ons](https://github.com/eliranwong/SBLGNT-add-ons) - SBL Greek New Testament enhancements
 
-## Markdown Bibles
+### AI-Generated Content
+- [Bible Book Analysis](https://github.com/eliranwong/BibleBookStudies) - AI analysis of every book
+- [Bible Chapter Summaries](https://github.com/eliranwong/BibleChapterSummaries) - AI summaries of every chapter
+- [Bible Verse Commentary](https://github.com/eliranwong/AI_Commentary) - AI commentary on every verse
 
-* [Markdown Bible - KJV](https://github.com/eliranwong/markdown_bible_KJV)
-* [Markdown Bible - NET](https://github.com/eliranwong/markdown_bible_NET)
+### Markdown Bibles
+- [KJV in Markdown](https://github.com/eliranwong/markdown_bible_KJV)
+- [NET in Markdown](https://github.com/eliranwong/markdown_bible_NET)
 
-### Audio Data
+### Audio Bibles
 
-* [ASV (American accent; verse-by-verse)](https://github.com/eliranwong/MP3_AmericanStandardVersion_american)
-* [BBE (British accent; verse-by-verse)](https://github.com/eliranwong/MP3_BibleInBasicEnglish_british)
-* [BHS5 (Hebrew; word-by-word)](https://github.com/eliranwong/MP3_BHS5_word-by-word)
-* [BSB (American accent; verse-by-verse)](https://github.com/eliranwong/MP3_BereanStudyBible_american)
-* [BSB (British accent; verse-by-verse)](https://github.com/eliranwong/MP3_BereanStudyBible_british)
-* [CUV (Cantonese; verse-by-verse)](https://github.com/eliranwong/MP3_ChineseUnionVersion_cantonese)
-* [CUVs (Mandarin; verse-by-verse)](https://github.com/eliranwong/MP3_ChineseUnionVersion_mandarin)
-* [ERV (British accent; verse-by-verse)](https://github.com/eliranwong/MP3_EnglishRevisedVersion_british)
-* [ISV (American accent; verse-by-verse)](https://github.com/eliranwong/MP3_InternationalStandardVersion_american)
-* [ISV (British accent; verse-by-verse)](https://github.com/eliranwong/MP3_InternationalStandardVersion_british)
-* [KJV (American accent; verse-by-verse)](https://github.com/eliranwong/MP3_KingJamesVersion_american)
-* [KJV (British accent; verse-by-verse)](https://github.com/eliranwong/MP3_KingJamesVersion_british)
-* [LEB (American accent; verse-by-verse)](https://github.com/eliranwong/MP3_LexhamEnglishBible_american)
-* [LEB (British accent; verse-by-verse)](https://github.com/eliranwong/MP3_LexhamEnglishBible_british)
-* [NET (American accent; verse-by-verse)](https://github.com/eliranwong/MP3_NewEnglishTranslation_american)
-* [NET (British accent; verse-by-verse)](https://github.com/eliranwong/MP3_NewEnglishTranslation_british)
-* [OGNT (Greek; word-by-word)](https://github.com/eliranwong/MP3_OpenGNT_word-by-word)
-* [OHGB (Hebrew & Greek; fast; verse-by-verse)](https://github.com/eliranwong/MP3_OpenHebrewGreekBible_fast)
-* [OHGB (Hebrew & Greek; slow; verse-by-verse)](https://github.com/eliranwong/MP3_OpenHebrewGreekBible_slow)
-* [SBLGNT (Greek; fast; verse-by-verse)](https://github.com/eliranwong/MP3_SBLGNT_fast)
-* [SBLGNT (Greek; slow; verse-by-verse)](https://github.com/eliranwong/MP3_SBLGNT_slow)
-* [WEB (British accent; verse-by-verse)](https://github.com/eliranwong/MP3_WebEnglishBible_british) 
-* [WLC (Hebrew; fast; verse-by-verse)](https://github.com/eliranwong/MP3_WLC_fast)
-* [WLC (Hebrew; slow; verse-by-verse)](https://github.com/eliranwong/MP3_WLC_slow)
+**English Translations:**
+- [ASV](https://github.com/eliranwong/MP3_AmericanStandardVersion_american) - American accent, verse-by-verse
+- [BBE](https://github.com/eliranwong/MP3_BibleInBasicEnglish_british) - British accent, verse-by-verse
+- [BSB](https://github.com/eliranwong/MP3_BereanStudyBible_american) / [BSB British](https://github.com/eliranwong/MP3_BereanStudyBible_british)
+- [ERV](https://github.com/eliranwong/MP3_EnglishRevisedVersion_british) - British accent, verse-by-verse
+- [ISV](https://github.com/eliranwong/MP3_InternationalStandardVersion_american) / [ISV British](https://github.com/eliranwong/MP3_InternationalStandardVersion_british)
+- [KJV](https://github.com/eliranwong/MP3_KingJamesVersion_american) / [KJV British](https://github.com/eliranwong/MP3_KingJamesVersion_british)
+- [LEB](https://github.com/eliranwong/MP3_LexhamEnglishBible_american) / [LEB British](https://github.com/eliranwong/MP3_LexhamEnglishBible_british)
+- [NET](https://github.com/eliranwong/MP3_NewEnglishTranslation_american) / [NET British](https://github.com/eliranwong/MP3_NewEnglishTranslation_british)
+- [WEB](https://github.com/eliranwong/MP3_WebEnglishBible_british) - British accent, verse-by-verse
 
-* [Chapter Podcast - Daniel](https://github.com/eliranwong/Bible_Podcast_Daniel)
-* [Chapter Podcast - The Twelve](https://github.com/eliranwong/Bible_Podcast_The_Twelve)
-* [Chapter Podcast - Ruth](https://github.com/eliranwong/Bible_Podcast_Ruth)
-* [Chapter Podcast - Numbers](https://github.com/eliranwong/Bible_Podcast_Numbers)
-* [Chapter Podcast - Leviticus](https://github.com/eliranwong/Bible_Podcast_Leviticus)
-* [Chapter Podcast - Hebrews](https://github.com/eliranwong/Bible_Podcast_Hebrews)
-* [Chapter Podcast - Gospel of Mark](https://github.com/eliranwong/Bible_Podcast_Gospel_of_Mark)
-* [Chapter Podcast - Exodus](https://github.com/eliranwong/Bible_Podcast_Exodus)
-* [Chapter Podcast - Catholic Letters](https://github.com/eliranwong/Bible_Podcast_Catholic_Letters)
+**Original Languages:**
+- [BHS5](https://github.com/eliranwong/MP3_BHS5_word-by-word) - Hebrew, word-by-word
+- [OGNT](https://github.com/eliranwong/MP3_OpenGNT_word-by-word) - Greek, word-by-word
+- [OHGB Fast](https://github.com/eliranwong/MP3_OpenHebrewGreekBible_fast) / [OHGB Slow](https://github.com/eliranwong/MP3_OpenHebrewGreekBible_slow) - Hebrew & Greek
+- [SBLGNT Fast](https://github.com/eliranwong/MP3_SBLGNT_fast) / [SBLGNT Slow](https://github.com/eliranwong/MP3_SBLGNT_slow) - Greek
+- [WLC Fast](https://github.com/eliranwong/MP3_WLC_fast) / [WLC Slow](https://github.com/eliranwong/MP3_WLC_slow) - Hebrew
 
-## Bible Promises
+**Chinese:**
+- [CUV Cantonese](https://github.com/eliranwong/MP3_ChineseUnionVersion_cantonese)
+- [CUV Mandarin](https://github.com/eliranwong/MP3_ChineseUnionVersion_mandarin)
 
-* [Take Words with You](https://github.com/eliranwong/take-words-with-you)
-* [Precious Bible Promises](https://github.com/eliranwong/Precious-Bible-Promises)
+**Chapter Podcasts:**
+- [Daniel](https://github.com/eliranwong/Bible_Podcast_Daniel)
+- [The Twelve](https://github.com/eliranwong/Bible_Podcast_The_Twelve)
+- [Ruth](https://github.com/eliranwong/Bible_Podcast_Ruth)
+- [Numbers](https://github.com/eliranwong/Bible_Podcast_Numbers)
+- [Leviticus](https://github.com/eliranwong/Bible_Podcast_Leviticus)
+- [Hebrews](https://github.com/eliranwong/Bible_Podcast_Hebrews)
+- [Gospel of Mark](https://github.com/eliranwong/Bible_Podcast_Gospel_of_Mark)
+- [Exodus](https://github.com/eliranwong/Bible_Podcast_Exodus)
+- [Catholic Letters](https://github.com/eliranwong/Bible_Podcast_Catholic_Letters)
 
-## Parallel Passages
+### Specialized Collections
 
-* [Gospels](https://github.com/eliranwong/Chinese_synopsis)
+**Bible Promises:**
+- [Take Words with You](https://github.com/eliranwong/take-words-with-you)
+- [Precious Bible Promises](https://github.com/eliranwong/Precious-Bible-Promises)
+
+**Parallel Passages:**
+- [Gospel Parallels](https://github.com/eliranwong/Chinese_synopsis)
