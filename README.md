@@ -20,7 +20,7 @@
 
 BibleMate AI is a comprehensive Bible study suite that represents a major upgrade from the [UniqueBible App](https://github.com/eliranwong/UniqueBible). It offers multiple interfaces and deployment options to suit different use cases:
 
-- **CLI** - Command-line interface for terminal users
+- **CLI/TUI** - Command-line interface for terminal users
 - **Web GUI** - Modern web interface accessible from any browser
 - **MCP Server** - Model Context Protocol integration for AI assistants
 - **HTTP/API Server** - RESTful API for custom integrations
@@ -32,8 +32,11 @@ BibleMate AI is a comprehensive Bible study suite that represents a major upgrad
 Choose the package(s) that match your needs:
 
 ```bash
-# CLI Version, Agent Mode, Partner Mode, and MCP Server
+# TUI/CLI Version, Agent Mode, Partner Mode, and MCP Server
 pip install --upgrade biblemate
+
+# Headless CLI Version, Agent Mode
+pip install --upgrade biblemateagent
 
 # Bible Data Setup
 pip install --upgrade biblematedata
@@ -45,8 +48,11 @@ pip install --upgrade biblemateweb
 ### Usage
 
 ```bash
-# Launch CLI / Agent Mode / Partner Mode
+# Launch TUI/CLI / Agent Mode / Partner Mode
 biblemate
+
+# Launch Headless CLI / Agent Mode
+biblemateagent
 
 # Launch MCP Server
 biblematemcp
