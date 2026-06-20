@@ -143,6 +143,15 @@ pip install --upgrade biblematedata
 biblematedata       # Setup Bible data
 ```
 
+### 4. Bible Agent
+**Repository:** https://github.com/eliranwong/biblemateagent
+**Package:** `biblemateagent`
+**Includes:** Non-interactive CLI tools to run BibleMate AI agent.
+
+```bash
+pip install --upgrade biblemateagent
+biblemateagent       # Run BibleMate agent
+```
 
 ## Related Projects
 
