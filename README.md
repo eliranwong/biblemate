@@ -168,6 +168,9 @@ BibleMate AI builds upon and integrates with several projects:
 - [AgentMake AI MCP](https://github.com/eliranwong/agentmakemcp) - MCP integration
 - [TeamGen AI](https://github.com/eliranwong/teamgenai) - Multi-agent collaboration
 
+### Workspace & IDE Integrations
+- [Antigravity BibleMate Workspace](https://github.com/eliranwong/antigravity-biblemate-workspace) - The latest BibleMate AI integration with all enhanced Bible study features, combining robust scripture databases, modular study skills, and specialized AI personas to streamline biblical research and writing on the Google Antigravity platform.
+
 ### Bible-Specific Tools
 - [SearchBible AI](https://github.com/eliranwong/searchbibleai) - AI-powered Bible search
 - [Bible Verse Parser](https://github.com/eliranwong/bible-verse-parser) - Verse reference parsing
