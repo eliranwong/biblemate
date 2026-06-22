@@ -1,5 +1,9 @@
 # BibleMate AI
 
+> [!IMPORTANT]
+> **Latest Advance:** The latest new advance of the BibleMate AI is at the **[Antigravity BibleMate Workspace](https://github.com/eliranwong/antigravity-biblemate-workspace)**.
+> This is a big upgrade from all the previous BibleMate AI work, fully agent-driven.
+
 **BibleMate AI** is a groundbreaking, autonomous AI agent designed to revolutionize your Bible study. It can create study plans, coordinate multiple Bible tools, and take multi-step actions to complete complex Bible-related tasks, such as conducting an in-depth study of a particular Bible passage.
 
 **🌐 Website:** https://biblemate.ai
@@ -169,7 +173,7 @@ BibleMate AI builds upon and integrates with several projects:
 - [TeamGen AI](https://github.com/eliranwong/teamgenai) - Multi-agent collaboration
 
 ### Workspace & IDE Integrations
-- [Antigravity BibleMate Workspace](https://github.com/eliranwong/antigravity-biblemate-workspace) - The latest BibleMate AI integration with all enhanced Bible study features, combining robust scripture databases, modular study skills, and specialized AI personas to streamline biblical research and writing on the Google Antigravity platform.
+- [Antigravity BibleMate Workspace](https://github.com/eliranwong/antigravity-biblemate-workspace) - The latest new advance and a big upgrade from all previous BibleMate AI work, fully agent-driven with specialized AI personas and modular study skills.
 
 ### Bible-Specific Tools
 - [SearchBible AI](https://github.com/eliranwong/searchbibleai) - AI-powered Bible search
