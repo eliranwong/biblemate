@@ -157,6 +157,15 @@ pip install --upgrade biblemateagent
 biblemateagent       # Run BibleMate agent
 ```
 
+### 5. BibleMate Workspace in Antigravity
+**Repository:** https://github.com/eliranwong/antigravity-biblemate-workspace
+**Includes:** Specialized AI personas and modular study skills
+
+```bash
+# Download and import workspace into Antigravity IDE
+curl -L -O https://github.com/eliranwong/antigravity-biblemate-workspace/raw/main/manual_setup.zip && unzip manual_setup.zip && rm manual_setup.zip
+```
+
 ## Related Projects
 
 BibleMate AI builds upon and integrates with several projects:
