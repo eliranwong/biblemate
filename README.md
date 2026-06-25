@@ -117,8 +117,8 @@ BibleMate AI consists of three main components, each maintained in separate repo
 
 ### 1. CLI & MCP Server
 **Repository:** https://github.com/eliranwong/biblematecli
-**Package:** `biblemate`
-**Includes:** Command-line interface, Agent Mode, Partner Mode, MCP Server
+- **Package:** `biblemate`
+- **Includes:** Command-line interface, Agent Mode, Partner Mode, MCP Server
 
 ```bash
 pip install --upgrade biblemate
@@ -128,8 +128,8 @@ biblematemcp        # Launch MCP Server
 
 ### 2. Web GUI & API Server
 **Repository:** https://github.com/eliranwong/biblemateweb
-**Package:** `biblemateweb`
-**Includes:** Web interface, HTTP server, API server, API client
+- **Package:** `biblemateweb`
+- **Includes:** Web interface, HTTP server, API server, API client
 
 ```bash
 pip install --upgrade biblemateweb
@@ -139,8 +139,8 @@ biblemateapi -h     # API client help
 
 ### 3. Bible Data
 **Repository:** https://github.com/eliranwong/biblematedata
-**Package:** `biblematedata`
-**Includes:** Data setup and management tools
+- **Package:** `biblematedata`
+- **Includes:** Data setup and management tools
 
 ```bash
 pip install --upgrade biblematedata
@@ -149,8 +149,8 @@ biblematedata       # Setup Bible data
 
 ### 4. Bible Agent
 **Repository:** https://github.com/eliranwong/biblemateagent
-**Package:** `biblemateagent`
-**Includes:** Non-interactive CLI tools to run BibleMate AI agent.
+- **Package:** `biblemateagent`
+- **Includes:** Non-interactive CLI tools to run BibleMate AI agent.
 
 ```bash
 pip install --upgrade biblemateagent
@@ -159,12 +159,12 @@ biblemateagent       # Run BibleMate agent
 
 ### 5. BibleMate Workspace in Antigravity
 **Repository:** https://github.com/eliranwong/antigravity-biblemate-workspace
-**Includes:** Specialized AI personas and modular study skills
+- **Includes:** Specialized AI personas and modular study skills
 
 ```bash
 # Navigate to your workspace directory
 cd <workspace_directory_name>
-# Download and import workspace directory
+# Download and import into your workspace directory
 curl -L -O https://github.com/eliranwong/antigravity-biblemate-workspace/raw/main/manual_setup.zip && unzip manual_setup.zip && rm manual_setup.zip
 # launch Antigravity
 antigravity-ide # or 'antigravity' (GUI without text editor) or agy (Antigravity CLI)
