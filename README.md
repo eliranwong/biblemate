@@ -116,7 +116,7 @@ BibleMate AI builds upon the UniqueBible App foundation with extensive new capab
 BibleMate AI consists of three main components, each maintained in separate repositories:
 
 ### 1. CLI & MCP Server
-**Repository:** https://github.com/eliranwong/biblematecli
+- **Repository:** https://github.com/eliranwong/biblematecli
 - **Package:** `biblemate`
 - **Includes:** Command-line interface, Agent Mode, Partner Mode, MCP Server
 
@@ -127,7 +127,7 @@ biblematemcp        # Launch MCP Server
 ```
 
 ### 2. Web GUI & API Server
-**Repository:** https://github.com/eliranwong/biblemateweb
+- **Repository:** https://github.com/eliranwong/biblemateweb
 - **Package:** `biblemateweb`
 - **Includes:** Web interface, HTTP server, API server, API client
 
@@ -138,7 +138,7 @@ biblemateapi -h     # API client help
 ```
 
 ### 3. Bible Data
-**Repository:** https://github.com/eliranwong/biblematedata
+- **Repository:** https://github.com/eliranwong/biblematedata
 - **Package:** `biblematedata`
 - **Includes:** Data setup and management tools
 
@@ -148,7 +148,7 @@ biblematedata       # Setup Bible data
 ```
 
 ### 4. Bible Agent
-**Repository:** https://github.com/eliranwong/biblemateagent
+- **Repository:** https://github.com/eliranwong/biblemateagent
 - **Package:** `biblemateagent`
 - **Includes:** Non-interactive CLI tools to run BibleMate AI agent.
 
@@ -158,7 +158,7 @@ biblemateagent       # Run BibleMate agent
 ```
 
 ### 5. BibleMate Workspace in Antigravity
-**Repository:** https://github.com/eliranwong/antigravity-biblemate-workspace
+- **Repository:** https://github.com/eliranwong/antigravity-biblemate-workspace
 - **Includes:** Specialized AI personas and modular study skills
 
 ```bash
