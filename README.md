@@ -162,8 +162,12 @@ biblemateagent       # Run BibleMate agent
 **Includes:** Specialized AI personas and modular study skills
 
 ```bash
-# Download and import workspace into Antigravity IDE
+# Navigate to your workspace directory
+cd <workspace_directory_name>
+# Download and import workspace directory
 curl -L -O https://github.com/eliranwong/antigravity-biblemate-workspace/raw/main/manual_setup.zip && unzip manual_setup.zip && rm manual_setup.zip
+# launch Antigravity
+antigravity-ide # or 'antigravity' (GUI without text editor) or agy (Antigravity CLI)
 ```
 
 ## Related Projects
